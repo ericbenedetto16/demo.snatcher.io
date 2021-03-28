@@ -1,0 +1,8 @@
+# Sequelize Generated Files
+models/index.js
+config/config.json
+migrations/*
+
+# Misc.
+package.json
+package-lock.json
