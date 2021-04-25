@@ -2,7 +2,6 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const exphbs = require('express-handlebars');
-const cors = require('cors');
 
 require('colors');
 require('dotenv').config();

@@ -1,16 +1,17 @@
 const { Model } = require('sequelize');
 
+// TODO: Add Optional Creator Information (UserId, etc.)
 module.exports = (sequelize, DataTypes) => {
     class Url extends Model {}
 
     Url.init(
         {
             slug: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(8),
                 primaryKey: true,
             },
             fullUrl: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: false,
             },
         },
@@ -20,6 +21,13 @@ module.exports = (sequelize, DataTypes) => {
             tableName: 'urls',
         }
     );
+
+    Url.associate = (models) => {
+        Url.hasMany(models.Tracker, {
+            foreignKey: 'slug',
+            as: 'trackers',
+        });
+    };
 
     return Url;
 };

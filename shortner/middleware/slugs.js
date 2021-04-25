@@ -2,20 +2,40 @@ const { nanoid } = require('nanoid');
 const { Url } = require('../models');
 
 exports.generateSlug = async (req, res, next) => {
-    let slug = nanoid(8);
+    try {
+        let slug = nanoid(8);
 
-    while ((await Url.findByPk(slug)) != null) slug = generateSlug();
+        // eslint-disable-next-line no-await-in-loop
+        while ((await Url.findByPk(slug)) !== null) slug = nanoid(8);
 
-    req.slug = slug;
-    next();
+        req.slug = slug;
+        next();
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+
+        return res.status(500).json({
+            success: false,
+            msg: 'Internal Server Error',
+        });
+    }
 };
 
 exports.getUrlBySlug = async (req, res, next) => {
-    let { slug } = req.params;
+    try {
+        const { slug } = req.params;
 
-    const record = await Url.findByPk(slug);
+        const record = await Url.findByPk(slug);
 
-    if (record != null) req.redirectUrl = record.fullUrl;
+        if (record != null) req.redirectUrl = record.fullUrl;
 
-    next();
+        next();
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+
+        return res.status(500).json({
+            success: false,
+        });
+    }
 };
