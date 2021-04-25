@@ -5,9 +5,7 @@ require('colors');
 exports.saveSlug = async (req, res) => {
     try {
         const { url } = req.body;
-        console.log(req.body);
 
-        // TODO: Check for Collisions
         const obj = await Url.create({
             slug: req.slug,
             fullUrl: url,
@@ -41,6 +39,6 @@ exports.redirectUserBySlug = async (req, res) => {
         // eslint-disable-next-line no-console
         console.log(`${err}`.red);
 
-        res.status(500).json({ success: false, msg: 'Internal Server Errro!' });
+        res.status(500).json({ success: false, msg: 'Internal Server Error!' });
     }
 };

@@ -1,16 +1,17 @@
 const { Model } = require('sequelize');
 
+// TODO: Add Optional Creator Information (UserId, etc.)
 module.exports = (sequelize, DataTypes) => {
     class Url extends Model {}
 
     Url.init(
         {
             slug: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(8),
                 primaryKey: true,
             },
             fullUrl: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: false,
             },
         },
