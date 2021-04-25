@@ -2,3 +2,4 @@
 models/index.js
 config/config.json
 migrations/*
+seeders/*
