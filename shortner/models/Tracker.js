@@ -58,5 +58,12 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
+    Tracker.associate = (models) => {
+        Tracker.belongsTo(models.Url, {
+            foreignKey: 'slug',
+            as: 'url',
+        });
+    };
+
     return Tracker;
 };

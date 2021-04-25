@@ -22,5 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
+    Url.associate = (models) => {
+        Url.hasMany(models.Tracker, {
+            foreignKey: 'slug',
+            as: 'trackers',
+        });
+    };
+
     return Url;
 };
