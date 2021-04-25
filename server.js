@@ -38,8 +38,7 @@ app.post('/createLink', slugs);
 const server = app.listen(process.env.PORT || 8080, () => {
     // eslint-disable-next-line no-console
     console.log(
-        `App Listening at http://${server.address().address}:${
-            server.address().port
+        `App Listening at http://${server.address().address}:${server.address().port
         }`
     );
 });
