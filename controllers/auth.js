@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { User } = require('../models');
-const passport = require('../middlewares/authentication');
+// const passport = require('../middlewares/authentication');
+const passport = require('../middleware/passport');
 
 
 router.post('/signup', (req, res) => {
@@ -10,6 +11,7 @@ router.post('/signup', (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
+        role: req.body.role,
     })
         .then((user) => {
             req.login(user, () => res.status(201).json(user));
