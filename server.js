@@ -5,8 +5,13 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const passport = require('passport');
 
 const app = express();
+
+require('./config/auth')(passport);
+
+app.use(passport.initialize());
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN || '*' }));
@@ -15,9 +20,12 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 
 // Import Routes
 const slugs = require('./routes/slugs');
+const users = require('./routes/users');
 
 // HealthCheck Endpoint
 app.get('/ping', (req, res) => res.send('ok'));
+
+app.use('/users/', users);
 
 // Front-End
 const FRONT_END_ROUTES = ['/', '/create', '/track', '/login'];
