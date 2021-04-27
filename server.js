@@ -21,6 +21,7 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 // Import Routes
 const slugs = require('./routes/slugs');
 const users = require('./routes/users');
+const payments = require('./routes/payments');
 
 // HealthCheck Endpoint
 app.get('/ping', (req, res) => res.send('ok'));
@@ -40,8 +41,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Gateway Services
-app.get('/:slugs', slugs);
+app.use('/payments', payments);
+
 app.post('/createLink', slugs);
+app.get('/:slugs', slugs);
 
 const server = app.listen(process.env.PORT || 8080, () => {
     // eslint-disable-next-line no-console

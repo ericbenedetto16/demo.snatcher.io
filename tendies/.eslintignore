@@ -1,0 +1,4 @@
+# Sequelize Generated Files
+models/index.js
+config/config.json
+migrations/*
