@@ -1,39 +1,40 @@
-const passport = require("./passport")
-const { User } = require("../models")
-
+const passport = require('passport');
 
 exports.authenticateUser = async (req, res, next) => {
-    try {
-        // TODO: Implement Auth
-        passport.isAuthenticated();
+    passport.authenticate('jwt', { session: false }, (err, user) => {
+        if (err) {
+            // eslint-disable-next-line no-console
+            console.log(err);
+            return res.sendStatus(401);
+        }
+
+        if (!user) return res.sendStatus(403);
+
+        req.user = user;
 
         next();
-    } catch (err) {
-        console.log(`${err}`.red);
-        res.status(500).json({ success: false, msg: 'Internal Server Error!' });
-    }
+    })(req, res, next);
 };
 
 exports.authorizeUser = async (req, res, next) => {
     try {
-        // TODO: Add RBAC
-        // req.authorized = true;
+        if (!req.user) res.sendStatus(401);
+        // TODO: Add All Protected Routes and Their Roles in Here
+        const protectedRoutes = new Map([
+            ['/slugs/disable', new Set(['admin'])],
+        ]);
 
-        // const authHeader = req.headers["authorization"]
-        // const token = authHeader && authHeader.split(" ")[1]
-        // if (token == null)
-        //     return res.sendStatus(401)
+        if (
+            // eslint-disable-next-line operator-linebreak
+            protectedRoutes.has(req.path) &&
+            protectedRoutes.get(req.path).has(req.user.role)
+        ) {
+            return next();
+        }
 
-        // jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        //     if (err) return res.sendStatus(403)
-
-        //     // console.log(user.name)
-        //     req.user = user
-        //     next()
-        // })
-
-        next();
+        res.sendStatus(403);
     } catch (err) {
+        // eslint-disable-next-line no-console
         console.log(`${err}`.red);
         res.status(500).json({ success: false, msg: 'Internal Server Error!' });
     }

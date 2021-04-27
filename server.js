@@ -5,9 +5,17 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+<<<<<<< HEAD
 // const passport = require('./middleware/auth');
+=======
+const passport = require('passport');
+>>>>>>> 11371345fe0ff51d26fd3f2c1c20d91bcdd09bb7
 
 const app = express();
+
+require('./config/auth')(passport);
+
+app.use(passport.initialize());
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN || '*' }));
@@ -18,11 +26,14 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 
 // Import Routes
 const slugs = require('./routes/slugs');
+const users = require('./routes/users');
 const payments = require('./routes/payments');
 const auth = require("./controllers/auth");
 
 // HealthCheck Endpoint
 app.get('/ping', (req, res) => res.send('ok'));
+
+app.use('/users/', users);
 
 // Front-End
 const FRONT_END_ROUTES = ['/', '/create', '/track', '/login'];
