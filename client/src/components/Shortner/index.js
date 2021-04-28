@@ -12,7 +12,7 @@ const urlValidator = (url) => {
     try {
         if (!url || url === '') return true;
 
-        new URL(url);
+        URL(url);
 
         return true;
     } catch (err) {
@@ -72,7 +72,7 @@ export const Shortner = () => {
                             <InputAdornment position='end'>
                                 <IconButton
                                     aria-label='Copy to Clipboard'
-                                    onClick={(e) => {
+                                    onClick={() => {
                                         document
                                             .querySelector('#generated-url')
                                             .select();
