@@ -11,11 +11,7 @@
     "author": "Eric Benedetto",
     "license": "ISC",
     "dependencies": {
-<<<<<<< HEAD
-        "bcryptjs": "^2.4.3",
-=======
         "bcrypt": "^5.0.1",
->>>>>>> 11371345fe0ff51d26fd3f2c1c20d91bcdd09bb7
         "colors": "^1.4.0",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
@@ -30,10 +26,6 @@
         "nanoid": "^3.1.22",
         "passport": "^0.4.1",
         "passport-jwt": "^4.0.0",
-<<<<<<< HEAD
-        "passport-local": "^1.0.0",
-=======
->>>>>>> 11371345fe0ff51d26fd3f2c1c20d91bcdd09bb7
         "sequelize": "^6.6.2"
     },
     "devDependencies": {

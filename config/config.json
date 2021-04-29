@@ -1,13 +1,8 @@
 {
   "development": {
     "username": "root",
-<<<<<<< HEAD
-    "password": "Jadarda22",
-    "database": "api_gateway",
-=======
     "password": null,
     "database": "snatcher_auth",
->>>>>>> 11371345fe0ff51d26fd3f2c1c20d91bcdd09bb7
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

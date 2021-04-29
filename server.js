@@ -5,11 +5,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-<<<<<<< HEAD
-// const passport = require('./middleware/auth');
-=======
 const passport = require('passport');
->>>>>>> 11371345fe0ff51d26fd3f2c1c20d91bcdd09bb7
 
 const app = express();
 
@@ -21,14 +17,11 @@ app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN || '*' }));
 app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 // Import Routes
 const slugs = require('./routes/slugs');
 const users = require('./routes/users');
 const payments = require('./routes/payments');
-const auth = require("./controllers/auth");
 
 // HealthCheck Endpoint
 app.get('/ping', (req, res) => res.send('ok'));
@@ -49,14 +42,15 @@ if (process.env.NODE_ENV === 'production') {
 
 // Gateway Services
 app.use('/payments', payments);
-app.use("/auth", auth);
+
 app.post('/createLink', slugs);
 app.get('/:slugs', slugs);
 
 const server = app.listen(process.env.PORT || 8080, () => {
     // eslint-disable-next-line no-console
     console.log(
-        `App Listening at http://${server.address().address}:${server.address().port
+        `App Listening at http://${server.address().address}:${
+            server.address().port
         }`
     );
 });
