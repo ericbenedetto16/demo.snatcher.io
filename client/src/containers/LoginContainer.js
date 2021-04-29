@@ -1,8 +1,4 @@
 import React from 'react';
 import { Login } from '../components/Login';
 
-export const LoginContainer = () => (
-    <div>
-        <Login />
-    </div>
-);
+export const LoginContainer = () => <Login />;

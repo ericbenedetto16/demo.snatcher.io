@@ -1,25 +1,14 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-// eslint-disable-next-line no-unused-vars
-// import React, { useState } from 'react';
-
-// export const Signup = () => (
-//     <div>
-//         <p>Hello Signup</p>
-//     </div>
-// );
-
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import {
+    Button,
+    CssBaseline,
+    TextField,
+    Link,
+    Grid,
+    Typography,
+    Container,
+    makeStyles,
+} from '@material-ui/core/';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -33,11 +22,15 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(3),
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
+    },
+    inline: {
+        display: 'inline-block',
+        marginRight: '5px',
     },
 }));
 
@@ -111,16 +104,16 @@ export const Signup = () => {
                     </Button>
                     <Grid container justify='flex-end'>
                         <Grid item>
+                            <p className={classes.inline}>
+                                Already have an account?
+                            </p>
                             <Link href='/login' variant='body2'>
-                                Already have an account? Log in
+                                Log in
                             </Link>
                         </Grid>
                     </Grid>
                 </form>
             </div>
-            <Box mt={5}>
-                {/* <Copyright /> */}
-            </Box>
         </Container>
     );
 };

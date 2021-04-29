@@ -1,8 +1,4 @@
 import React from 'react';
 import { Signup } from '../components/Signup';
 
-export const SignupContainer = () => (
-    <div>
-        <Signup />
-    </div>
-);
+export const SignupContainer = () => <Signup />;
