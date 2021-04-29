@@ -1,3 +1,4 @@
 import React from 'react';
+import { Login } from '../components/Login';
 
-export const LoginContainer = () => <div>This is the Login Page.</div>;
+export const LoginContainer = () => <Login />;
