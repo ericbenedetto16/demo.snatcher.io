@@ -19,6 +19,7 @@ exports.authenticateUser = async (req, res, next) => {
 exports.authorizeUser = async (req, res, next) => {
     try {
         if (!req.user) res.sendStatus(401);
+
         // TODO: Add All Protected Routes and Their Roles in Here
         const protectedRoutes = new Map([
             ['/slugs/disable', new Set(['admin'])],
@@ -39,4 +40,3 @@ exports.authorizeUser = async (req, res, next) => {
         res.status(500).json({ success: false, msg: 'Internal Server Error!' });
     }
 };
-

@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "Jadarda22",
+    "password": null,
     "database": "snatcher_shortner",
     "host": "127.0.0.1",
     "dialect": "mysql"
