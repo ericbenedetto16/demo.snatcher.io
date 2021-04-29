@@ -12,6 +12,7 @@ var migrationCommands = [
                     "type": Sequelize.INTEGER,
                     "field": "id",
                     "primaryKey": true,
+                    "autoIncrement": true,
                 },
                 "firstName": {
                     "type": Sequelize.STRING,
