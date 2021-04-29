@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
     Button,
     CssBaseline,
@@ -37,6 +38,14 @@ const useStyles = makeStyles((theme) => ({
 export const Signup = () => {
     const classes = useStyles();
 
+    const history = useHistory();
+
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
     return (
         <Container component='main' maxWidth='xs'>
             <CssBaseline />
@@ -44,7 +53,44 @@ export const Signup = () => {
                 <Typography component='h1' variant='h5'>
                     Sign up
                 </Typography>
-                <form className={classes.form}>
+                <form
+                    className={classes.form}
+                    // eslint-disable-next-line consistent-return
+                    onSubmit={async (e) => {
+                        try {
+                            e.preventDefault();
+
+                            const payload = {
+                                firstName,
+                                lastName,
+                                email,
+                                password,
+                            };
+
+                            const res = await fetch(
+                                `${process.env.REACT_APP_GATEWAY_URL}/users/register/`,
+                                {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(payload),
+                                }
+                            );
+
+                            const json = await res.json();
+
+                            if (!json.success) {
+                                throw new Error('Could Not Sign Up');
+                            }
+
+                            history.push('/login');
+                        } catch (err) {
+                            // eslint-disable-next-line no-alert
+                            alert('Error Signing Up');
+                        }
+                    }}
+                >
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -56,6 +102,9 @@ export const Signup = () => {
                                 id='firstName'
                                 label='First Name'
                                 autoFocus
+                                onChange={(e) => {
+                                    setFirstName(e.target.value);
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -67,6 +116,9 @@ export const Signup = () => {
                                 label='Last Name'
                                 name='lastName'
                                 autoComplete='lname'
+                                onChange={(e) => {
+                                    setLastName(e.target.value);
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -78,6 +130,10 @@ export const Signup = () => {
                                 label='Email Address'
                                 name='email'
                                 autoComplete='email'
+                                type='email'
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -89,7 +145,35 @@ export const Signup = () => {
                                 label='Password'
                                 type='password'
                                 id='password'
-                                autoComplete='current-password'
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant='outlined'
+                                required
+                                fullWidth
+                                name='confirm-password'
+                                label='Confirm Password'
+                                type='password'
+                                id='confirm-password'
+                                onChange={(e) => {
+                                    setConfirmPassword(e.target.value);
+                                }}
+                                error={
+                                    // eslint-disable-next-line operator-linebreak
+                                    password !== confirmPassword &&
+                                    confirmPassword !== ''
+                                }
+                                helperText={
+                                    // eslint-disable-next-line operator-linebreak
+                                    password !== confirmPassword &&
+                                    confirmPassword !== ''
+                                        ? 'Passwords Do Not Match'
+                                        : ''
+                                }
                             />
                         </Grid>
                     </Grid>

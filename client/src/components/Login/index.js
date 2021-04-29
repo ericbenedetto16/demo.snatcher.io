@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
     Button,
     CssBaseline,
@@ -37,6 +38,12 @@ const useStyles = makeStyles((theme) => ({
 export const Login = () => {
     const classes = useStyles();
 
+    const history = useHistory();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [invalid, setInvalid] = useState(false);
+
     return (
         <Container component='main' maxWidth='xs'>
             <CssBaseline />
@@ -44,7 +51,47 @@ export const Login = () => {
                 <Typography component='h1' variant='h5'>
                     Log in
                 </Typography>
-                <form className={classes.form}>
+                <form
+                    className={classes.form}
+                    // eslint-disable-next-line consistent-return
+                    onSubmit={async (e) => {
+                        try {
+                            e.preventDefault();
+
+                            setInvalid(false); // Reset Invalid Credentials Status
+
+                            const payload = {
+                                username: email,
+                                password,
+                            };
+
+                            const res = await fetch(
+                                `${process.env.REACT_APP_GATEWAY_URL}/users/login/`,
+                                {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(payload),
+                                }
+                            );
+
+                            const json = await res.json();
+
+                            if (!json.success) {
+                                setInvalid(true);
+                                return;
+                            }
+
+                            // TODO: Crete Util Functions For Set/Get Bearer Token in LocalStorage
+                            history.push('/');
+                        } catch (err) {
+                            setInvalid(true);
+                            // eslint-disable-next-line no-alert
+                            alert('Server Error');
+                        }
+                    }}
+                >
                     <TextField
                         variant='outlined'
                         margin='normal'
@@ -55,6 +102,10 @@ export const Login = () => {
                         name='email'
                         autoComplete='email'
                         autoFocus
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                        }}
+                        error={invalid}
                     />
                     <TextField
                         variant='outlined'
@@ -66,6 +117,13 @@ export const Login = () => {
                         type='password'
                         id='password'
                         autoComplete='current-password'
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                        }}
+                        error={invalid}
+                        helperText={
+                            invalid ? 'Invalid Username or Password' : ''
+                        }
                     />
                     <Button
                         type='submit'
