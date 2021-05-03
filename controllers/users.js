@@ -39,7 +39,7 @@ exports.loginUser = async (req, res, next) => {
 
         if (!username || !password || username === '' || password === '') {
             return res
-                .status(403)
+                .status(401)
                 .json({ success: false, msg: 'Invalid Username or Password' });
         }
 
@@ -51,13 +51,13 @@ exports.loginUser = async (req, res, next) => {
 
         if (!user) {
             return res
-                .status(403)
+                .status(401)
                 .json({ success: false, msg: 'Invalid Username or Password' });
         }
 
         if (!(await bcrypt.compare(password, user.password))) {
             return res
-                .status(403)
+                .status(401)
                 .json({ success: false, msg: 'Invalid Username or Password' });
         }
 
