@@ -14,20 +14,3 @@ export const getName = (token) => {
 };
 
 export const deleteToken = () => localStorage.removeItem('token');
-
-// export const isTokenExpired = (token) => {
-//     try {
-//         const decoded = jwt.decode(token);
-//         if (decoded.exp < Date.now() / 1000) {
-//             // Checking if token is expired.
-//             return true;
-//         }
-//         return false;
-//     } catch (err) {
-//         return false;
-//     }
-// };
-
-// export const isLoggedIn = () => {
-
-// };

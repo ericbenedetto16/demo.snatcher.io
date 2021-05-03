@@ -14,7 +14,8 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link as RouterLink } from 'react-router-dom';
-import { getToken } from '../../utils';
+// import { getToken } from '../../utils';
+import { useAuthentication } from '../../hooks';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,11 +52,13 @@ export const Header = () => {
         setWidth(window.innerWidth);
     };
 
+    const logged = useAuthentication();
+
     const LINKS = [
         { name: 'Home', href: '/' },
         { name: 'Create', href: '/create/' },
         { name: 'Track', href: '/track/' },
-        getToken()
+        logged
             ? { name: 'Logout', href: '/logout/' }
             : { name: 'Login', href: '/login/' },
     ];

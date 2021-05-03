@@ -13,8 +13,8 @@ import { Logout } from './components/Logout';
 
 ReactDOM.render(
     <Router>
-        <Header />
         <Switch>
+            <Header />
             <Route path='/' component={HomeContainer} exact />
             <Route path='/create/' component={CreateContainer} exact />
             <Route path='/track/' component={TrackingContainer} exact />
