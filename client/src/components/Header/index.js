@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link as RouterLink } from 'react-router-dom';
+import { getToken } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -54,7 +55,9 @@ export const Header = () => {
         { name: 'Home', href: '/' },
         { name: 'Create', href: '/create/' },
         { name: 'Track', href: '/track/' },
-        { name: 'Login', href: '/login/' },
+        getToken()
+            ? { name: 'Logout', href: '/logout/' }
+            : { name: 'Login', href: '/login/' },
     ];
 
     const iconRenderer = () => {

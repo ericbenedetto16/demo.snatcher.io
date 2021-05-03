@@ -170,7 +170,7 @@ export const Signup = () => {
                                 helperText={
                                     // eslint-disable-next-line operator-linebreak
                                     password !== confirmPassword &&
-                                    confirmPassword !== ''
+                                        confirmPassword !== ''
                                         ? 'Passwords Do Not Match'
                                         : ''
                                 }

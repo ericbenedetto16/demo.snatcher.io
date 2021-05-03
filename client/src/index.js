@@ -9,6 +9,7 @@ import { CreateContainer } from './containers/CreateContainer';
 import { TrackingContainer } from './containers/TrackingContainer';
 import { LoginContainer } from './containers/LoginContainer';
 import { SignupContainer } from './containers/SignupContainer';
+import { Logout } from './components/Logout';
 
 ReactDOM.render(
     <Router>
@@ -19,7 +20,8 @@ ReactDOM.render(
             <Route path='/track/' component={TrackingContainer} exact />
             <Route path='/track/:slug' component={TrackingContainer} exact />
             <Route path='/login/' component={LoginContainer} exact />
-            <Route path='/signup/' component={SignupContainer} exact />
+            <Route path='/register/' component={SignupContainer} exact />
+            <Route path='/logout/' component={Logout} exact />
         </Switch>
     </Router>,
     document.getElementById('root')

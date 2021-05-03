@@ -11,6 +11,8 @@ import {
     makeStyles,
 } from '@material-ui/core/';
 
+import { setToken } from '../../utils/index';
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -84,6 +86,7 @@ export const Login = () => {
                             }
 
                             // TODO: Crete Util Functions For Set/Get Bearer Token in LocalStorage
+                            setToken(json.token);
                             history.push('/');
                         } catch (err) {
                             setInvalid(true);
@@ -139,7 +142,7 @@ export const Login = () => {
                             <p className={classes.inline}>
                                 Don&apos;t have an account?
                             </p>
-                            <Link href='/signup' variant='body2'>
+                            <Link href='/register' variant='body2'>
                                 Sign Up
                             </Link>
                         </Grid>
