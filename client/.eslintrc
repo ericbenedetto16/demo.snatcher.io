@@ -15,6 +15,7 @@
     "rules": {
         "linebreak-style": "off",
         "indent": ["error", 4],
+        "no-underscore-dangle": "off",
         "comma-dangle": [
             "error",
             {
@@ -28,6 +29,7 @@
         "import/prefer-default-export": "off",
         "react/jsx-filename-extension": "off",
         "react/jsx-indent": ["error", 4],
+        "react/jsx-props-no-spreading": "off",
         "react/jsx-indent-props": ["error", 4],
         "jsx-quotes": ["error", "prefer-single"]
     },

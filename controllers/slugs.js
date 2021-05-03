@@ -1,6 +1,6 @@
 const httpProxy = require('express-http-proxy');
 
-const slugServiceProxy = httpProxy(process.env.SLUG_SERVICE_URL);
+const slugServiceProxy = httpProxy(process.env.SNATCHER_SHORTNER_SERVICE_HOST);
 
 exports.forwardToSlugService = async (req, res, next) => {
     try {

@@ -1,6 +1,8 @@
 const httpProxy = require('express-http-proxy');
 
-const paymentServiceProxy = httpProxy(process.env.PAYMENT_SERVICE_URL);
+const paymentServiceProxy = httpProxy(
+    process.env.SNATCHER_TENDIES_SERVICE_HOST
+);
 
 exports.forwardToPaymentService = async (req, res, next) => {
     try {

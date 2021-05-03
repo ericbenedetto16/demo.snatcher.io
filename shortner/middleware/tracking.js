@@ -6,7 +6,7 @@ exports.trackUser = async (req, res, next) => {
     // TODO: Implement Proxy/VPN Hiding to Add Warning to User
     // TODO: Implement User-Agent/Device-Type Tracking
     try {
-        if (!req.redirectUrl) next(); // Invalid Slug, Skip Tracking
+        if (!req.redirectUrl) return next(); // Invalid Slug, Skip Tracking
 
         // eslint-disable-next-line operator-linebreak
         const ip =

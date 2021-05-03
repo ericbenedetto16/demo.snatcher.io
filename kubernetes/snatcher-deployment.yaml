@@ -1,0 +1,269 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: snatcher-client
+spec:
+  selector:
+    app: snatcher-client
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: snatcher-gateway
+spec:
+  selector:
+    app: snatcher-gateway
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: snatcher-shortner
+spec:
+  selector:
+    app: snatcher-shortner
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: snatcher-tendies
+spec:
+  selector:
+    app: snatcher-tendies
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 8082
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snatcher-gateway-deployment
+  labels:
+    app: snatcher-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snatcher-gateway
+  template:
+    metadata:
+      labels:
+        app: snatcher-gateway
+    spec:
+      containers:
+      - name: snatcher-gateway
+        image: registry.digitalocean.com/snatcher/snatcher-gateway
+        env:
+        - name: JWT_ACCESS_TOKEN_SECRET
+          value: REPLACE
+        - name: NODE_ENV
+          value: 'production'
+        - name: MYSQL_PROD_PASSWORD
+          value: REPLACE
+        ports:
+          - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snatcher-shortner-deployment
+  labels:
+    app: snatcher-shortner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snatcher-shortner
+  template:
+    metadata:
+      labels:
+        app: snatcher-shortner
+    spec:
+      containers:
+      - name: snatcher-shortner
+        image: registry.digitalocean.com/snatcher/snatcher-shortner
+        env:
+        - name: IP_GEOLOCATION_API_KEY
+          value: REPLACE
+        - name: NODE_ENV
+          value: 'production'
+        - name: MYSQL_PROD_PASSWORD
+          value: REPLACE
+        ports:
+          - containerPort: 8081
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snatcher-tendies-deployment
+  labels:
+    app: snatcher-tendies
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snatcher-tendies
+  template:
+    metadata:
+      labels:
+        app: snatcher-tendies
+    spec:
+      containers:
+      - name: snatcher-tendies
+        image: registry.digitalocean.com/snatcher/snatcher-tendies
+        env:
+        - name: PAYPAL_CLIENT_ID
+          value: REPLACE
+        - name: PAYPAL_SECRET
+          value: REPLACE
+        - name: MYSQL_PROD_PASSWORD
+          value: REPLACE
+        ports:
+          - containerPort: 8082
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snatcher-client-deployment
+  labels:
+    app: snatcher-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snatcher-client
+  template:
+    metadata:
+      labels:
+        app: snatcher-client
+    spec:
+      containers:
+      - name: snatcher-client
+        image: registry.digitalocean.com/snatcher/snatcher-client
+        env:
+        - name: REACT_APP_GATEWAY_URL
+          value: 'https://gateway.snatcher.link'
+        - name: PAYPAL_SECRET
+          value: REPLACE
+        ports:
+          - containerPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: snatcher-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # cert-manager.io/cluster-issuer: snatcher-staging
+    cert-manager.io/cluster-issuer: snatcher-prod
+spec:
+  tls:
+  - hosts:
+      - snatcher.link
+      - gateway.snatcher.link
+      - cmprsd.link
+      - minified.live
+      - shrinkd.xyz
+      - shrtnd.xyz
+      - shrtnr.io
+      - tinyd.live
+    # secretName: snatcher-staging-tls
+    secretName: snatcher-prod-tls
+  rules:
+    - host: "snatcher.link" # Capture Front-End Traffic
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: snatcher-client
+                port:
+                  number: 80
+    - host: "gateway.snatcher.link"
+      http: # Send All Other Traffic to the Gateway to Handle
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: snatcher-gateway
+                port:
+                  number: 80
+    - host: "cmprsd.link"
+      http: # Send All Other Traffic to the Gateway to Handle
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: snatcher-gateway
+                port:
+                  number: 80
+    - host: "minified.live"
+      http: # Send All Other Traffic to the Gateway to Handle
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: snatcher-gateway
+                port:
+                  number: 80
+    - host: "shrinkd.xyz"
+      http: # Send All Other Traffic to the Gateway to Handle
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: snatcher-gateway
+                port:
+                  number: 80
+    - host: "shrtnr.io"
+      http: # Send All Other Traffic to the Gateway to Handle
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: snatcher-gateway
+                port:
+                  number: 80
+    - host: "shrtnd.xyz"
+      http: # Send All Other Traffic to the Gateway to Handle
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: snatcher-gateway
+                port:
+                  number: 80
+    - host: "tinyd.live"
+      http: # Send All Other Traffic to the Gateway to Handle
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: snatcher-gateway
+                port:
+                  number: 80
