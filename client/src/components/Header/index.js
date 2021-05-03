@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     AppBar,
@@ -13,7 +13,7 @@ import {
     ListItem,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 // import { getToken } from '../../utils';
 import { useAuthentication } from '../../hooks';
 
@@ -43,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Header = () => {
+    const location = useLocation();
+
+    useEffect(() => {}, [location]);
+
     const COLLAPSE_THRESHOLD = 900;
     const classes = useStyles();
     const [windowWidth, setWidth] = useState(window.innerWidth);
@@ -53,6 +57,7 @@ export const Header = () => {
     };
 
     const logged = useAuthentication();
+    console.log(`logged ${logged}`);
 
     const LINKS = [
         { name: 'Home', href: '/' },
