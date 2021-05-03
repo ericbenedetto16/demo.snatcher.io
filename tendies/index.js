@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./config/db.js').config();
 require('colors');
 const express = require('express');
 const morgan = require('morgan');
@@ -7,6 +8,7 @@ const helmet = require('helmet');
 const app = express();
 
 app.use(helmet());
+
 app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 
