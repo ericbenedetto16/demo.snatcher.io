@@ -1,5 +1,6 @@
+/* eslint-disable operator-linebreak */
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link as RouterLink } from 'react-router-dom';
 import {
     Button,
     CssBaseline,
@@ -10,6 +11,7 @@ import {
     Container,
     makeStyles,
 } from '@material-ui/core/';
+import { GATEWAY_URL } from '../../api/queries';
 
 import { setToken } from '../../utils/index';
 
@@ -68,7 +70,7 @@ export const Login = () => {
                             };
 
                             const res = await fetch(
-                                `${process.env.REACT_APP_GATEWAY_URL}/users/login/`,
+                                `${GATEWAY_URL}/users/login/`,
                                 {
                                     method: 'POST',
                                     headers: {
@@ -142,7 +144,13 @@ export const Login = () => {
                             <p className={classes.inline}>
                                 Don&apos;t have an account?
                             </p>
-                            <Link href='/register' variant='body2'>
+
+                            <Link
+                                component={RouterLink}
+                                href='/signup'
+                                to='/signup'
+                                variant='body2'
+                            >
                                 Sign Up
                             </Link>
                         </Grid>

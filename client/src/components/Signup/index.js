@@ -1,5 +1,6 @@
+/* eslint-disable operator-linebreak */
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link as RouterLink } from 'react-router-dom';
 import {
     Button,
     CssBaseline,
@@ -10,6 +11,7 @@ import {
     Container,
     makeStyles,
 } from '@material-ui/core/';
+import { GATEWAY_URL } from '../../api/queries';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -68,7 +70,7 @@ export const Signup = () => {
                             };
 
                             const res = await fetch(
-                                `${process.env.REACT_APP_GATEWAY_URL}/users/register/`,
+                                `${GATEWAY_URL}/users/register/`,
                                 {
                                     method: 'POST',
                                     headers: {
@@ -191,7 +193,12 @@ export const Signup = () => {
                             <p className={classes.inline}>
                                 Already have an account?
                             </p>
-                            <Link href='/login' variant='body2'>
+                            <Link
+                                component={RouterLink}
+                                href='/login'
+                                to='/login'
+                                variant='body2'
+                            >
                                 Log in
                             </Link>
                         </Grid>

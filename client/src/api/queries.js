@@ -1,4 +1,13 @@
-export const GATEWAY_URL = process.env.REACT_APP_GATEWAY_URL;
+// TODO: Remove this Trash
+const getGatewayURL = () => {
+    if (process.env.NODE_ENV === 'development') {
+        return process.env.REACT_APP_GATEWAY_URL;
+    }
+
+    return window.__global.REACT_APP_GATEWAY_URL;
+};
+
+export const GATEWAY_URL = getGatewayURL();
 
 export const createLink = async (link) => {
     let res = await fetch(`${GATEWAY_URL}/createLink`, {
