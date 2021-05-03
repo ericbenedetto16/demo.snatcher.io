@@ -12,7 +12,8 @@ const urlValidator = (url) => {
     try {
         if (!url || url === '') return true;
 
-        URL(url);
+        // eslint-disable-next-line no-new
+        new URL(url);
 
         return true;
     } catch (err) {
