@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 export const Header = () => {
     const location = useLocation();
 
-    useEffect(() => {}, [location]);
+    useEffect(() => { }, [location]);
 
     const COLLAPSE_THRESHOLD = 900;
     const classes = useStyles();
@@ -61,7 +61,7 @@ export const Header = () => {
 
     const LINKS = [
         { name: 'Home', href: '/' },
-        { name: 'Create', href: '/create/' },
+        // { name: 'Create', href: '/create/' },
         { name: 'Track', href: '/track/' },
         logged
             ? { name: 'Logout', href: '/logout/' }
