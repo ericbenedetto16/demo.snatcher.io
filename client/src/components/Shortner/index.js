@@ -5,10 +5,14 @@ import {
     InputAdornment,
     TextField,
     Grid,
+    Grow,
 } from '@material-ui/core';
+// import SmsIcon from '@material-ui/icons/Sms';
 import { Autocomplete } from '@material-ui/lab';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { createLink } from '../../api/queries';
+// import { useAuthentication } from '../../hooks';
+import { Sms } from '../Sms';
 
 const urlValidator = (url) => {
     try {
@@ -54,6 +58,7 @@ export const Shortner = () => {
     const [url, setUrl] = useState('');
     const [shortened, setShortened] = useState(null);
     const [domain, setDomain] = useState(DEFAULT_DOMAIN);
+    const [canShorten, setCanShorten] = useState(false);
 
     return (
         <>
@@ -62,8 +67,12 @@ export const Shortner = () => {
                     e.preventDefault();
                     const slug = await createLink(url);
 
+                    // eslint-disable-next-line no-alert
                     if (!slug) alert('Error Creating Slug');
-                    else setShortened(slug);
+                    else {
+                        setShortened(slug);
+                        setCanShorten(false);
+                    }
                 }}
                 noValidate
                 autoComplete='off'
@@ -76,9 +85,12 @@ export const Shortner = () => {
                             label='Link to Shorten'
                             placeholder='https://google.com/'
                             variant='outlined'
-                            onChange={(e) => setUrl(e.target.value)}
+                            onChange={(e) => {
+                                setUrl(e.target.value.trim());
+                                setCanShorten(true);
+                            }}
                             style={{ width: '100%' }}
-                            autoFocus='true'
+                            autoFocus
                             defaultValue='https://'
                         />
                     </Grid>
@@ -88,8 +100,8 @@ export const Shortner = () => {
                             type='submit'
                             color='primary'
                             variant='contained'
-                            fullWidth='true'
-                            disabled={url === '' || !urlValidator(url)}
+                            fullWidth
+                            disabled={url === '' || !canShorten || !urlValidator(url)}
                         >
                             Shorten
                         </Button>
@@ -99,55 +111,63 @@ export const Shortner = () => {
             {shortened ? (
                 <Grid container spacing={2} style={{ marginTop: '2%' }}>
                     <Grid item xs={12}>
-                        <Autocomplete
-                            id='domain-autocomplete'
-                            options={DOMAINS}
-                            getOptionLabel={(opt) => opt.name}
-                            getOptionSelected={(opt) => opt.name}
-                            onChange={(e, v) => {
-                                if (v === '' || v === null) {
-                                    setDomain(DEFAULT_DOMAIN);
-                                } else {
-                                    setDomain(v.name);
-                                }
-                            }}
-                            value={{ name: domain || DEFAULT_DOMAIN }}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label='Domain'
-                                    variant='outlined'
-                                />
-                            )}
-                        />
+                        <Grow in timeout={500}>
+                            <Autocomplete
+                                id='domain-autocomplete'
+                                options={DOMAINS}
+                                getOptionLabel={(opt) => opt.name}
+                                getOptionSelected={(opt) => opt.name}
+                                onChange={(e, v) => {
+                                    if (v === '' || v === null) {
+                                        setDomain(DEFAULT_DOMAIN);
+                                    } else {
+                                        setDomain(v.name);
+                                    }
+                                }}
+                                value={{ name: domain || DEFAULT_DOMAIN }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label='Domain'
+                                        variant='outlined'
+                                    />
+                                )}
+                            />
+                        </Grow>
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            id='generated-url'
-                            label='Shortened URL'
-                            readOnly
-                            value={`${domain}/${shortened}`}
-                            style={{
-                                width: '100%',
-                            }}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position='end'>
-                                        <IconButton
-                                            aria-label='Copy to Clipboard'
-                                            onClick={() => {
-                                                document
-                                                    .querySelector('#generated-url')
-                                                    .select();
-                                                document.execCommand('copy');
-                                            }}
-                                        >
-                                            <FileCopyIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
+                        <Grow in timeout={1000}>
+                            <TextField
+                                id='generated-url'
+                                label='Shortened URL'
+                                readOnly
+                                value={`${domain}/${shortened}`}
+                                style={{
+                                    width: '100%',
+                                }}
+                                autoFocus
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position='end'>
+                                            <IconButton
+                                                aria-label='Copy to Clipboard'
+                                                onClick={() => {
+                                                    document
+                                                        .querySelector('#generated-url')
+                                                        .select();
+                                                    document.execCommand('copy');
+                                                }}
+                                            >
+                                                <FileCopyIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Grow>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Sms shortenedLink={`${domain}/${shortened}`} />
                     </Grid>
                 </Grid>
             ) : (

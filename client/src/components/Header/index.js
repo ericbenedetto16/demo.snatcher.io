@@ -57,7 +57,6 @@ export const Header = () => {
     };
 
     const logged = useAuthentication();
-    console.log(`logged ${logged}`);
 
     const LINKS = [
         { name: 'Home', href: '/' },

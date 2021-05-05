@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable operator-linebreak */
 import React, { useState } from 'react';
 import { useHistory, Link as RouterLink } from 'react-router-dom';
@@ -39,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Login = () => {
+// eslint-disable-next-line react/prop-types
+export const Login = ({ setIsAuthenticated, setToggleSignup }) => {
     const classes = useStyles();
 
     const history = useHistory();
@@ -55,6 +57,7 @@ export const Login = () => {
                 <Typography component='h1' variant='h5'>
                     Log in
                 </Typography>
+
                 <form
                     className={classes.form}
                     // eslint-disable-next-line consistent-return
@@ -89,6 +92,11 @@ export const Login = () => {
 
                             // TODO: Crete Util Functions For Set/Get Bearer Token in LocalStorage
                             setToken(json.token);
+                            // TODO: If came from SMS then return to sms
+                            if (setIsAuthenticated) {
+                                // eslint-disable-next-line react/prop-types
+                                setIsAuthenticated(true);
+                            }
                             history.push('/');
                         } catch (err) {
                             setInvalid(true);
@@ -144,15 +152,25 @@ export const Login = () => {
                             <p className={classes.inline}>
                                 Don&apos;t have an account?
                             </p>
+                            {setToggleSignup ?
+                                (
+                                    // if came from sms, and clicked sign up, dont link to /signup just render the <Signup />
+                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                                    <Link onClick={setToggleSignup}>
+                                        Sign Up
+                                    </Link>
 
-                            <Link
-                                component={RouterLink}
-                                href='/signup'
-                                to='/signup'
-                                variant='body2'
-                            >
-                                Sign Up
-                            </Link>
+                                ) : (
+                                    <Link
+                                        component={RouterLink}
+                                        href='/signup'
+                                        to='/signup'
+                                        variant='body2'
+                                    >
+                                        Sign Up
+                                    </Link>
+                                )}
+
                         </Grid>
                     </Grid>
                 </form>

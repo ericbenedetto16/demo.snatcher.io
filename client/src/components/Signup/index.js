@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable operator-linebreak */
 import React, { useState } from 'react';
 import { useHistory, Link as RouterLink } from 'react-router-dom';
@@ -37,7 +38,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Signup = () => {
+// eslint-disable-next-line react/prop-types
+export const Signup = ({ setToggleSignup }) => {
     const classes = useStyles();
 
     const history = useHistory();
@@ -86,6 +88,12 @@ export const Signup = () => {
                                 throw new Error('Could Not Sign Up');
                             }
 
+                            // TODO: If came from SMS then return to sms
+                            if (setToggleSignup) {
+                                // eslint-disable-next-line react/prop-types
+                                setToggleSignup(false);
+                                return;
+                            }
                             history.push('/login');
                         } catch (err) {
                             // eslint-disable-next-line no-alert
@@ -193,14 +201,25 @@ export const Signup = () => {
                             <p className={classes.inline}>
                                 Already have an account?
                             </p>
-                            <Link
-                                component={RouterLink}
-                                href='/login'
-                                to='/login'
-                                variant='body2'
-                            >
-                                Log in
-                            </Link>
+                            {setToggleSignup ?
+                                (
+                                    // eslint-disable-next-line max-len
+                                    // if came from sms, and clicked sign up, dont link to /signup just render the <Signup />
+                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                                    <Link onClick={() => setToggleSignup(false)}>
+                                        Log in
+                                    </Link>
+
+                                ) : (
+                                    <Link
+                                        component={RouterLink}
+                                        href='/login'
+                                        to='/login'
+                                        variant='body2'
+                                    >
+                                        Log in
+                                    </Link>
+                                )}
                         </Grid>
                     </Grid>
                 </form>
