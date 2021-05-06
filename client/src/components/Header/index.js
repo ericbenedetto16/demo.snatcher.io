@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     AppBar,
@@ -13,7 +13,9 @@ import {
     ListItem,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+// import { getToken } from '../../utils';
+import { useAuthentication } from '../../hooks';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Header = () => {
+    const location = useLocation();
+
+    useEffect(() => { }, [location]);
+
     const COLLAPSE_THRESHOLD = 900;
     const classes = useStyles();
     const [windowWidth, setWidth] = useState(window.innerWidth);
@@ -50,11 +56,15 @@ export const Header = () => {
         setWidth(window.innerWidth);
     };
 
+    const logged = useAuthentication();
+
     const LINKS = [
         { name: 'Home', href: '/' },
-        { name: 'Create', href: '/create/' },
+        // { name: 'Create', href: '/create/' },
         { name: 'Track', href: '/track/' },
-        { name: 'Login', href: '/login/' },
+        logged
+            ? { name: 'Logout', href: '/logout/' }
+            : { name: 'Login', href: '/login/' },
     ];
 
     const iconRenderer = () => {

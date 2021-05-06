@@ -1,5 +1,5 @@
-/* eslint-disable operator-linebreak */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, Link as RouterLink } from 'react-router-dom';
 import {
     Button,
@@ -12,6 +12,7 @@ import {
     makeStyles,
 } from '@material-ui/core/';
 import { GATEWAY_URL } from '../../api/queries';
+import { setToken } from '../../utils/index';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Login = () => {
+export const Login = ({ setToggleSignup }) => {
     const classes = useStyles();
 
     const history = useHistory();
@@ -53,6 +54,7 @@ export const Login = () => {
                 <Typography component='h1' variant='h5'>
                     Log in
                 </Typography>
+
                 <form
                     className={classes.form}
                     // eslint-disable-next-line consistent-return
@@ -85,7 +87,8 @@ export const Login = () => {
                                 return;
                             }
 
-                            // TODO: Crete Util Functions For Set/Get Bearer Token in LocalStorage
+                            setToken(json.token);
+
                             history.push('/');
                         } catch (err) {
                             setInvalid(true);
@@ -143,6 +146,12 @@ export const Login = () => {
                             </p>
                             <Link
                                 component={RouterLink}
+                                onClick={(e) => {
+                                    if (setToggleSignup) {
+                                        e.preventDefault();
+                                        setToggleSignup(true);
+                                    }
+                                }}
                                 href='/signup'
                                 to='/signup'
                                 variant='body2'
@@ -155,4 +164,12 @@ export const Login = () => {
             </div>
         </Container>
     );
+};
+
+Login.propTypes = {
+    setToggleSignup: PropTypes.func,
+};
+
+Login.defaultProps = {
+    setToggleSignup: undefined,
 };

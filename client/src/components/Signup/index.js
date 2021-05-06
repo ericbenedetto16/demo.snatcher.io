@@ -1,5 +1,5 @@
-/* eslint-disable operator-linebreak */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, Link as RouterLink } from 'react-router-dom';
 import {
     Button,
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Signup = () => {
+export const Signup = ({ setToggleSignup }) => {
     const classes = useStyles();
 
     const history = useHistory();
@@ -86,6 +86,11 @@ export const Signup = () => {
                                 throw new Error('Could Not Sign Up');
                             }
 
+                            // TODO: If came from SMS then return to sms
+                            if (setToggleSignup) {
+                                setToggleSignup(false);
+                                return;
+                            }
                             history.push('/login');
                         } catch (err) {
                             // eslint-disable-next-line no-alert
@@ -193,8 +198,15 @@ export const Signup = () => {
                             <p className={classes.inline}>
                                 Already have an account?
                             </p>
+
                             <Link
                                 component={RouterLink}
+                                onClick={(e) => {
+                                    if (setToggleSignup) {
+                                        e.preventDefault();
+                                        setToggleSignup();
+                                    }
+                                }}
                                 href='/login'
                                 to='/login'
                                 variant='body2'
@@ -207,4 +219,12 @@ export const Signup = () => {
             </div>
         </Container>
     );
+};
+
+Signup.propTypes = {
+    setToggleSignup: PropTypes.func,
+};
+
+Signup.defaultProps = {
+    setToggleSignup: undefined,
 };

@@ -4,10 +4,15 @@ import {
     IconButton,
     InputAdornment,
     TextField,
+    Grid,
+    Grow,
 } from '@material-ui/core';
+// import SmsIcon from '@material-ui/icons/Sms';
 import { Autocomplete } from '@material-ui/lab';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { createLink } from '../../api/queries';
+// import { useAuthentication } from '../../hooks';
+import { Sms } from '../Sms';
 
 const urlValidator = (url) => {
     try {
@@ -53,6 +58,7 @@ export const Shortner = () => {
     const [url, setUrl] = useState('');
     const [shortened, setShortened] = useState(null);
     const [domain, setDomain] = useState(DEFAULT_DOMAIN);
+    const [canShorten, setCanShorten] = useState(false);
 
     return (
         <>
@@ -61,93 +67,109 @@ export const Shortner = () => {
                     e.preventDefault();
                     const slug = await createLink(url);
 
+                    // eslint-disable-next-line no-alert
                     if (!slug) alert('Error Creating Slug');
-                    else setShortened(slug);
+                    else {
+                        setShortened(slug);
+                        setCanShorten(false);
+                    }
                 }}
                 noValidate
                 autoComplete='off'
-                style={{ marginLeft: 25 }}
             >
-                <div>
-                    <TextField
-                        error={!urlValidator(url)}
-                        id='outlined-error'
-                        label='Link to Shorten'
-                        placeholder='https://google.com/'
-                        variant='outlined'
-                        helperText='Enter a Valid URL'
-                        onChange={(e) => setUrl(e.target.value)}
-                        style={{ width: '250px' }}
-                    />
-                </div>
-                <div>
-                    <Button
-                        type='submit'
-                        color='primary'
-                        variant='contained'
-                        disabled={url === '' || !urlValidator(url)}
-                    >
-                        Shorten
-                    </Button>
-                </div>
+                <Grid container spacing={2} alignItems='center'>
+                    <Grid item sm={8} xs={12}>
+                        <TextField
+                            error={!urlValidator(url)}
+                            id='outlined-error'
+                            label='Link to Shorten'
+                            placeholder='https://google.com/'
+                            variant='outlined'
+                            onChange={(e) => {
+                                setUrl(e.target.value.trim());
+                                setCanShorten(true);
+                            }}
+                            style={{ width: '100%' }}
+                            autoFocus
+                            defaultValue='https://'
+                        />
+                    </Grid>
+
+                    <Grid item sm={4} xs={12}>
+                        <Button
+                            type='submit'
+                            color='primary'
+                            variant='contained'
+                            fullWidth
+                            disabled={url === '' || !canShorten || !urlValidator(url)}
+                        >
+                            Shorten
+                        </Button>
+                    </Grid>
+                </Grid>
             </form>
             {shortened ? (
-                <>
-                    <Autocomplete
-                        id='domain-autocomplete'
-                        options={DOMAINS}
-                        getOptionLabel={(opt) => opt.name}
-                        getOptionSelected={(opt) => opt.name}
-                        onChange={(e, v) => {
-                            if (v === '' || v === null) {
-                                setDomain(DEFAULT_DOMAIN);
-                            } else {
-                                setDomain(v.name);
-                            }
-                        }}
-                        value={{ name: domain || DEFAULT_DOMAIN }}
-                        style={{
-                            width: '250px',
-                            marginTop: '10px',
-                            marginLeft: '25px',
-                        }}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label='Domain'
-                                variant='outlined'
+                <Grid container spacing={2} style={{ marginTop: '2%' }}>
+                    <Grid item xs={12}>
+                        <Grow in timeout={500}>
+                            <Autocomplete
+                                id='domain-autocomplete'
+                                options={DOMAINS}
+                                getOptionLabel={(opt) => opt.name}
+                                getOptionSelected={(opt) => opt.name}
+                                onChange={(e, v) => {
+                                    if (v === '' || v === null) {
+                                        setDomain(DEFAULT_DOMAIN);
+                                    } else {
+                                        setDomain(v.name);
+                                    }
+                                }}
+                                value={{ name: domain || DEFAULT_DOMAIN }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label='Domain'
+                                        variant='outlined'
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                    <TextField
-                        id='generated-url'
-                        label='Shortened URL'
-                        readOnly
-                        value={`${domain}/${shortened}`}
-                        style={{
-                            marginLeft: 25,
-                            marginTop: 10,
-                            width: '300px',
-                        }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position='end'>
-                                    <IconButton
-                                        aria-label='Copy to Clipboard'
-                                        onClick={() => {
-                                            document
-                                                .querySelector('#generated-url')
-                                                .select();
-                                            document.execCommand('copy');
-                                        }}
-                                    >
-                                        <FileCopyIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </>
+                        </Grow>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grow in timeout={1000}>
+                            <TextField
+                                id='generated-url'
+                                label='Shortened URL'
+                                readOnly
+                                value={`${domain}/${shortened}`}
+                                style={{
+                                    width: '100%',
+                                }}
+                                autoFocus
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position='end'>
+                                            <IconButton
+                                                aria-label='Copy to Clipboard'
+                                                onClick={() => {
+                                                    document
+                                                        .querySelector('#generated-url')
+                                                        .select();
+                                                    document.execCommand('copy');
+                                                }}
+                                            >
+                                                <FileCopyIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Grow>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Sms shortenedLink={`${domain}/${shortened}`} />
+                    </Grid>
+                </Grid>
             ) : (
                 []
             )}
