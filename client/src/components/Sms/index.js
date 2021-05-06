@@ -1,7 +1,5 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable max-len */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
     Button,
     Grow,
@@ -11,13 +9,10 @@ import {
     makeStyles,
     TextField,
 } from '@material-ui/core';
-import {
-    Sms as SmsIcon,
-    Send as SendIcon,
-} from '@material-ui/icons';
+import { Sms as SmsIcon, Send as SendIcon } from '@material-ui/icons';
 import { Login } from '../Login';
-import { getToken } from '../../utils';
 import { Signup } from '../Signup';
+import { useAuthentication } from '../../hooks';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -33,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Sms = (props) => {
+export const Sms = ({ shortenedLink }) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState(getToken());
+    const isAuthenticated = useAuthentication();
     const [toggleSignup, setToggleSignup] = useState(false);
 
     const handleOpen = () => {
@@ -73,57 +68,57 @@ export const Sms = (props) => {
             >
                 <Fade in={open}>
                     <div className={classes.paper}>
-                        {
-                            isAuthenticated !== null ? (
-                                <>
-                                    <h2 id='transition-modal-title'>Send link</h2>
-                                    {/* <p id='transition-modal-description'>react-transition-group animates me.</p> */}
-                                    <form>
-                                        <TextField
-                                            id='generated-url'
-                                            label='Shortened URL'
-                                            readOnly
-                                            value={props.shortenedLink}
-                                            fullWidth
-                                        />
-                                        <TextField
-                                            variant='outlined'
-                                            margin='normal'
-                                            required
-                                            fullWidth
-                                            id='message'
-                                            label='Message body'
-                                            name='message'
-                                            autoComplete='message'
-                                            autoFocus
-                                            multiline
-                                        />
-                                        <Button
-                                            variant='contained'
-                                            color='primary'
-                                            endIcon={<SendIcon />}
-                                        >
-                                            Send
-                                        </Button>
-                                    </form>
-                                </>
-                            )
-                                : (
-                                    <>
-                                        <h2 id='transition-modal-title'>Must be logged in to send a text</h2>
-                                        {toggleSignup
-                                            ? (
-                                                <Signup setToggleSignup={setToggleSignup} />
-                                            ) : (
-                                                <Login setIsAuthenticated={setIsAuthenticated} setToggleSignup={setToggleSignup} />
-                                            )}
-                                    </>
-                                )
-                        }
-
+                        {isAuthenticated ? (
+                            <>
+                                <h2 id='transition-modal-title'>Send link</h2>
+                                <form>
+                                    <TextField
+                                        id='generated-url'
+                                        label='Shortened URL'
+                                        readOnly
+                                        value={shortenedLink}
+                                        fullWidth
+                                    />
+                                    <TextField
+                                        variant='outlined'
+                                        margin='normal'
+                                        required
+                                        fullWidth
+                                        id='message'
+                                        label='Message body'
+                                        name='message'
+                                        autoComplete='message'
+                                        autoFocus
+                                        multiline
+                                    />
+                                    <Button
+                                        variant='contained'
+                                        color='primary'
+                                        endIcon={<SendIcon />}
+                                    >
+                                        Send
+                                    </Button>
+                                </form>
+                            </>
+                        ) : (
+                            <>
+                                <h2 id='transition-modal-title'>
+                                    Must be logged in to send a text
+                                </h2>
+                                {toggleSignup ? (
+                                    <Signup setToggleSignup={setToggleSignup} />
+                                ) : (
+                                    <Login setToggleSignup={setToggleSignup} />
+                                )}
+                            </>
+                        )}
                     </div>
                 </Fade>
             </Modal>
         </>
     );
+};
+
+Sms.propTypes = {
+    shortenedLink: PropTypes.string.isRequired,
 };

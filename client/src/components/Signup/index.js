@@ -1,6 +1,5 @@
-/* eslint-disable no-undef */
-/* eslint-disable operator-linebreak */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, Link as RouterLink } from 'react-router-dom';
 import {
     Button,
@@ -38,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// eslint-disable-next-line react/prop-types
 export const Signup = ({ setToggleSignup }) => {
     const classes = useStyles();
 
@@ -90,7 +88,6 @@ export const Signup = ({ setToggleSignup }) => {
 
                             // TODO: If came from SMS then return to sms
                             if (setToggleSignup) {
-                                // eslint-disable-next-line react/prop-types
                                 setToggleSignup(false);
                                 return;
                             }
@@ -222,4 +219,12 @@ export const Signup = ({ setToggleSignup }) => {
             </div>
         </Container>
     );
+};
+
+Signup.propTypes = {
+    setToggleSignup: PropTypes.func,
+};
+
+Signup.defaultProps = {
+    setToggleSignup: undefined,
 };

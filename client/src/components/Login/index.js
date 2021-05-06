@@ -1,6 +1,5 @@
-/* eslint-disable max-len */
-/* eslint-disable operator-linebreak */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, Link as RouterLink } from 'react-router-dom';
 import {
     Button,
@@ -13,7 +12,6 @@ import {
     makeStyles,
 } from '@material-ui/core/';
 import { GATEWAY_URL } from '../../api/queries';
-
 import { setToken } from '../../utils/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,8 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// eslint-disable-next-line react/prop-types
-export const Login = ({ setIsAuthenticated, setToggleSignup }) => {
+export const Login = ({ setToggleSignup }) => {
     const classes = useStyles();
 
     const history = useHistory();
@@ -90,13 +87,8 @@ export const Login = ({ setIsAuthenticated, setToggleSignup }) => {
                                 return;
                             }
 
-                            // TODO: Crete Util Functions For Set/Get Bearer Token in LocalStorage
                             setToken(json.token);
-                            // TODO: If came from SMS then return to sms
-                            if (setIsAuthenticated) {
-                                // eslint-disable-next-line react/prop-types
-                                setIsAuthenticated(true);
-                            }
+
                             history.push('/');
                         } catch (err) {
                             setInvalid(true);
@@ -172,4 +164,12 @@ export const Login = ({ setIsAuthenticated, setToggleSignup }) => {
             </div>
         </Container>
     );
+};
+
+Login.propTypes = {
+    setToggleSignup: PropTypes.func,
+};
+
+Login.defaultProps = {
+    setToggleSignup: undefined,
 };
