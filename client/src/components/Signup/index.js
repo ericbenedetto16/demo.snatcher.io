@@ -180,7 +180,7 @@ export const Signup = ({ setToggleSignup }) => {
                                 helperText={
                                     // eslint-disable-next-line operator-linebreak
                                     password !== confirmPassword &&
-                                        confirmPassword !== ''
+                                    confirmPassword !== ''
                                         ? 'Passwords Do Not Match'
                                         : ''
                                 }
@@ -201,25 +201,21 @@ export const Signup = ({ setToggleSignup }) => {
                             <p className={classes.inline}>
                                 Already have an account?
                             </p>
-                            {setToggleSignup ?
-                                (
-                                    // eslint-disable-next-line max-len
-                                    // if came from sms, and clicked sign up, dont link to /signup just render the <Signup />
-                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                                    <Link onClick={() => setToggleSignup(false)}>
-                                        Log in
-                                    </Link>
 
-                                ) : (
-                                    <Link
-                                        component={RouterLink}
-                                        href='/login'
-                                        to='/login'
-                                        variant='body2'
-                                    >
-                                        Log in
-                                    </Link>
-                                )}
+                            <Link
+                                component={RouterLink}
+                                onClick={(e) => {
+                                    if (setToggleSignup) {
+                                        e.preventDefault();
+                                        setToggleSignup();
+                                    }
+                                }}
+                                href='/login'
+                                to='/login'
+                                variant='body2'
+                            >
+                                Log in
+                            </Link>
                         </Grid>
                     </Grid>
                 </form>

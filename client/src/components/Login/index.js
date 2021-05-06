@@ -152,25 +152,20 @@ export const Login = ({ setIsAuthenticated, setToggleSignup }) => {
                             <p className={classes.inline}>
                                 Don&apos;t have an account?
                             </p>
-                            {setToggleSignup ?
-                                (
-                                    // if came from sms, and clicked sign up, dont link to /signup just render the <Signup />
-                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                                    <Link onClick={setToggleSignup}>
-                                        Sign Up
-                                    </Link>
-
-                                ) : (
-                                    <Link
-                                        component={RouterLink}
-                                        href='/signup'
-                                        to='/signup'
-                                        variant='body2'
-                                    >
-                                        Sign Up
-                                    </Link>
-                                )}
-
+                            <Link
+                                component={RouterLink}
+                                onClick={(e) => {
+                                    if (setToggleSignup) {
+                                        e.preventDefault();
+                                        setToggleSignup(true);
+                                    }
+                                }}
+                                href='/signup'
+                                to='/signup'
+                                variant='body2'
+                            >
+                                Sign Up
+                            </Link>
                         </Grid>
                     </Grid>
                 </form>
