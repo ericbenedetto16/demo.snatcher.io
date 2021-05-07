@@ -106,6 +106,7 @@ export const Login = ({ setToggleSignup }) => {
                         label='Email Address'
                         name='email'
                         autoComplete='email'
+                        type='email'
                         autoFocus
                         onChange={(e) => {
                             setEmail(e.target.value);
