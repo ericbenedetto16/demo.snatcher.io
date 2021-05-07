@@ -71,7 +71,12 @@ export const Sms = ({ shortenedLink }) => {
                         {isAuthenticated ? (
                             <>
                                 <h2 id='transition-modal-title'>Send link</h2>
-                                <form>
+                                <form
+                                    // TODO: Send Requests to Texting Service
+                                    onSubmit={async (e) => {
+                                        e.preventDefault();
+                                    }}
+                                >
                                     <TextField
                                         id='generated-url'
                                         label='Shortened URL'
@@ -87,13 +92,13 @@ export const Sms = ({ shortenedLink }) => {
                                         id='message'
                                         label='Message body'
                                         name='message'
-                                        autoComplete='message'
                                         autoFocus
                                         multiline
                                     />
                                     <Button
                                         variant='contained'
                                         color='primary'
+                                        type='submit'
                                         endIcon={<SendIcon />}
                                     >
                                         Send
