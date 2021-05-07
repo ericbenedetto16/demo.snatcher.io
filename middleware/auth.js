@@ -43,6 +43,8 @@ exports.authorizeUser = async (req, res, next) => {
         // TODO: Add All Protected Routes and Their Roles in Here
         const protectedRoutes = new Map([
             ['/slugs/disable', new Set(['admin'])],
+            ['/payments/create', new Set(['admin', 'general'])],
+            ['/payments/capture', new Set('admin', 'general')],
         ]);
 
         if (!protectedRoutes.has(req.path)) return next();
