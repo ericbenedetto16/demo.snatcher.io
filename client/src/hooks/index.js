@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { getToken } from '../utils';
+import { userAuthenticated } from '../api/auth';
 
 export const useAuthentication = () => {
     const [auth, setAuth] = useState(null);
     useEffect(() => {
         let cancelled = false;
-        const f = () => {
-            const d = getToken();
+        const f = async () => {
+            const d = await userAuthenticated();
             if (!cancelled) setAuth(d);
         };
         f();
