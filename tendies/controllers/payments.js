@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const { PAYPAL_ORDER_API } = require('../utils/constants');
+const { Order } = require('../models');
 
 exports.createOrder = async (req, res) => {
     try {
@@ -51,23 +52,18 @@ exports.createOrder = async (req, res) => {
 
 exports.captureTransaction = async (req, res) => {
     try {
-        const { orderID } = req.body;
+        const { orderID, slug, msgBody } = req.body;
 
         let capture = await fetch(`${PAYPAL_ORDER_API}${orderID}/capture`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${req.auth.access_token}`,
             },
         });
 
         capture = await capture.json();
-
-        // TODO: Implement Database Stuff
-        // if (!capture.error) {
-        //     captureID = capture.purchase_units[0].payments.captures[0].id;
-        //     database.saveCaptureID(captureID);
-        // }
 
         if (capture.error) {
             // eslint-disable-next-line no-console
@@ -77,6 +73,15 @@ exports.captureTransaction = async (req, res) => {
                 msg: 'Paypal Error',
             });
         }
+
+        const captureID = capture.purchase_units[0].payments.captures[0].id;
+        await Order.create({
+            userId: req.user,
+            slug,
+            msgBody,
+            paypalOrderId: orderID,
+            paypalCaptureId: captureID,
+        });
 
         res.status(200).json({
             success: true,
