@@ -48,7 +48,6 @@ var migrationCommands = [
                 "paypalCaptureId": {
                     "type": Sequelize.STRING,
                     "field": "paypalCaptureId",
-                    "allowNull": false,
                     "unique": true,
                 },
                 "void": {
