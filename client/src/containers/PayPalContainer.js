@@ -7,8 +7,13 @@ export const PayPalContainer = () => (
         options={{
             'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
             currency: 'USD',
+            intent: 'authorize',
         }}
     >
-        <PayPalIntegration msgBody='test' slug='test' />
+        <PayPalIntegration
+            msgBody='test'
+            slug='test'
+            recipient='' // FIXME: Remove Phone Number
+        />
     </PayPalScriptProvider>
 );
