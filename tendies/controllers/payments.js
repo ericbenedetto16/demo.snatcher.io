@@ -1,9 +1,13 @@
 const fetch = require('node-fetch');
-const { PAYPAL_ORDER_API } = require('../utils/constants');
+const {
+    PAYPAL_ORDER_API,
+    PAYPAL_AUTHORIZATION_API,
+} = require('../utils/constants');
 const { Order } = require('../models');
 
 exports.createOrder = async (req, res) => {
     try {
+        const { slug, recipient, msgBody } = req.body;
         let order = await fetch(PAYPAL_ORDER_API, {
             method: 'POST',
             headers: {
@@ -12,7 +16,7 @@ exports.createOrder = async (req, res) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                intent: 'CAPTURE',
+                intent: 'AUTHORIZE',
                 purchase_units: [
                     {
                         amount: {
@@ -35,6 +39,15 @@ exports.createOrder = async (req, res) => {
             });
         }
 
+        // Save New Order in Database
+        await Order.create({
+            userId: req.user,
+            slug,
+            recipient,
+            msgBody,
+            paypalOrderId: order.id,
+        });
+
         res.status(200).json({
             success: true,
             orderID: order.id,
@@ -50,18 +63,61 @@ exports.createOrder = async (req, res) => {
     }
 };
 
-exports.captureTransaction = async (req, res) => {
+exports.voidAuthorization = async (req, res) => {
     try {
-        const { orderID, slug, msgBody } = req.body;
+        const { authorizationID } = req;
 
-        let capture = await fetch(`${PAYPAL_ORDER_API}${orderID}/capture`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${req.auth.access_token}`,
+        const capture = await fetch(
+            `${PAYPAL_AUTHORIZATION_API}${authorizationID}/void`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${req.auth.access_token}`,
+                },
+            }
+        );
+
+        if (capture.status !== 204) throw new Error('Paypal Error');
+
+        // Void the Order in the Database
+        await Order.update(
+            {
+                void: true,
             },
+            { where: { paypalAuthorizationId: authorizationID } }
+        );
+
+        res.status(500).json({
+            success: true,
+            msg: 'Transaction Aborted Due to Server Error, Payment Voided',
         });
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+
+        res.status(500).json({
+            success: false,
+            msg: 'Internal Server Error',
+        });
+    }
+};
+
+exports.captureAuthorization = async (req, res) => {
+    try {
+        const { authorizationID } = req;
+
+        let capture = await fetch(
+            `${PAYPAL_AUTHORIZATION_API}${authorizationID}/capture`,
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${req.auth.access_token}`,
+                },
+            }
+        );
 
         capture = await capture.json();
 
@@ -74,14 +130,15 @@ exports.captureTransaction = async (req, res) => {
             });
         }
 
-        const captureID = capture.purchase_units[0].payments.captures[0].id;
-        await Order.create({
-            userId: req.user,
-            slug,
-            msgBody,
-            paypalOrderId: orderID,
-            paypalCaptureId: captureID,
-        });
+        const captureID = capture.id;
+
+        // Mark Order as Paid
+        await Order.update(
+            {
+                paypalCaptureId: captureID,
+            },
+            { where: { paypalAuthorizationId: authorizationID } }
+        );
 
         res.status(200).json({
             success: true,
