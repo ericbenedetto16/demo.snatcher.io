@@ -1,7 +1,7 @@
 import { getToken } from '../utils';
 import { GATEWAY_URL } from './queries';
 
-export const instantiateOrder = async () => {
+export const instantiateOrder = async (msgBody, recipient, slug) => {
     try {
         let res = await fetch(`${GATEWAY_URL}/payments/create`, {
             method: 'post',
@@ -9,6 +9,7 @@ export const instantiateOrder = async () => {
                 'Content-Type': 'application/json',
                 Authorization: getToken(),
             },
+            body: JSON.stringify({ msgBody, recipient, slug }),
         });
 
         res = await res.json();
@@ -20,9 +21,14 @@ export const instantiateOrder = async () => {
     }
 };
 
-export const capturePayment = async (data, msgBody, slug) => {
+export const authorizeAndCapturePayment = async (
+    data,
+    msgBody,
+    recipient,
+    slug
+) => {
     try {
-        await fetch(`${GATEWAY_URL}/payments/capture`, {
+        await fetch(`${GATEWAY_URL}/payments/authorize`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,6 +37,7 @@ export const capturePayment = async (data, msgBody, slug) => {
             body: JSON.stringify({
                 orderID: data.orderID,
                 msgBody,
+                recipient,
                 slug,
             }),
         });

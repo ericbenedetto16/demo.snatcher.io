@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PayPalButtons, FUNDING } from '@paypal/react-paypal-js';
-import { capturePayment, instantiateOrder } from '../../api/paypal';
+import { authorizeAndCapturePayment, instantiateOrder } from '../../api/paypal';
 
-export const PayPalIntegration = ({ msgBody, slug }) => {
+export const PayPalIntegration = ({ msgBody, recipient, slug }) => {
     // eslint-disable-next-line consistent-return
-    const createOrder = async () => instantiateOrder();
+    const createOrder = async () => instantiateOrder(msgBody, recipient, slug);
 
     const onApprove = async (data) => {
-        await capturePayment(data, msgBody, slug);
+        await authorizeAndCapturePayment(data, msgBody, recipient, slug);
     };
 
     return (
@@ -30,5 +30,6 @@ export const PayPalIntegration = ({ msgBody, slug }) => {
 
 PayPalIntegration.propTypes = {
     msgBody: PropTypes.string.isRequired,
+    recipient: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
 };

@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(8),
                 allowNull: false,
             },
+            recipient: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
             msgBody: {
                 type: DataTypes.TEXT,
                 allowNull: false,
@@ -27,10 +31,18 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 unique: true,
             },
+            paypalAuthorizationId: {
+                type: DataTypes.STRING,
+                unique: true,
+            },
             paypalCaptureId: {
                 type: DataTypes.STRING,
-                allowNull: false,
                 unique: true,
+            },
+            void: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
             },
         },
         {

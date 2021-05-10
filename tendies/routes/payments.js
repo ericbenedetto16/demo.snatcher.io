@@ -1,10 +1,22 @@
 const router = require('express').Router();
-const { createOrder, captureTransaction } = require('../controllers/payments');
+const {
+    createOrder,
+    captureAuthorization,
+} = require('../controllers/payments');
 const { validateUser } = require('../middleware/auth');
-const { getAccessToken } = require('../middleware/paypal');
+const { getAccessToken, authorizeOrder } = require('../middleware/paypal');
+const { sendSMS } = require('../middleware/sms');
 
 router.route('/create').post(validateUser, getAccessToken, createOrder);
 
-router.route('/capture').post(validateUser, getAccessToken, captureTransaction);
+router
+    .route('/authorize')
+    .post(
+        validateUser,
+        getAccessToken,
+        authorizeOrder,
+        sendSMS,
+        captureAuthorization
+    );
 
 module.exports = router;

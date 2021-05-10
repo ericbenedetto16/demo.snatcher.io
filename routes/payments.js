@@ -7,7 +7,7 @@ router
     .post(authenticateUser, authorizeUser, forwardToPaymentService);
 
 router
-    .route('/capture')
+    .route('/authorize')
     .post(authenticateUser, authorizeUser, forwardToPaymentService);
 
 module.exports = router;
