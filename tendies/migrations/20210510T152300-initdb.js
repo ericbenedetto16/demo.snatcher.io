@@ -24,6 +24,11 @@ var migrationCommands = [
                     "field": "slug",
                     "allowNull": false,
                 },
+                "recipient": {
+                    "type": Sequelize.STRING,
+                    "field": "recipient",
+                    "allowNull": false,
+                },
                 "msgBody": {
                     "type": Sequelize.TEXT,
                     "field": "msgBody",
@@ -35,11 +40,22 @@ var migrationCommands = [
                     "allowNull": false,
                     "unique": true,
                 },
+                "paypalAuthorizationId": {
+                    "type": Sequelize.STRING,
+                    "field": "paypalAuthorizationId",
+                    "unique": true,
+                },
                 "paypalCaptureId": {
                     "type": Sequelize.STRING,
                     "field": "paypalCaptureId",
                     "allowNull": false,
                     "unique": true,
+                },
+                "void": {
+                    "type": Sequelize.BOOLEAN,
+                    "field": "void",
+                    "allowNull": false,
+                    "defaultValue": false,
                 },
                 "createdAt": {
                     "type": Sequelize.DATE,
