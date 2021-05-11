@@ -12,5 +12,7 @@ router.use('/payments', payments);
 
 router.post('/createLink', slugs);
 router.get('/:slugs', slugs);
+router.get('/track/:slug', slugs);
+router.post('/getSlugs', slugs);
 
 module.exports = router;
