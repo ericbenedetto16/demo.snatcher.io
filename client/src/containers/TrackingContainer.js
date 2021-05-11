@@ -1,3 +1,4 @@
 import React from 'react';
+import { Track } from '../components/Track';
 
-export const TrackingContainer = () => <div>This is the Tracking Page.</div>;
+export const TrackingContainer = () => <div><Track /></div>;

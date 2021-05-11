@@ -11,9 +11,9 @@ export const PayPalContainer = () => (
         }}
     >
         <PayPalIntegration
-            msgBody='test'
+            msgBody='test99'
             slug='test'
-            recipient='' // FIXME: Remove Phone Number
+            recipient='+1 (347) 466-3815' // FIXME: Remove Phone Number
         />
     </PayPalScriptProvider>
 );

@@ -8,11 +8,16 @@ import {
     Fade,
     makeStyles,
     TextField,
+    Typography,
 } from '@material-ui/core';
+// eslint-disable-next-line no-unused-vars
 import { Sms as SmsIcon, Send as SendIcon } from '@material-ui/icons';
+import MuiPhoneNumber from 'material-ui-phone-number';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { Login } from '../Login';
 import { Signup } from '../Signup';
 import { useAuthentication } from '../../hooks';
+import { PayPalIntegration } from '../PayPal';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -28,11 +33,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Sms = ({ shortenedLink }) => {
+export const Sms = ({ shortenedLink, slug }) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const isAuthenticated = useAuthentication();
     const [toggleSignup, setToggleSignup] = useState(false);
+    const [phone, setPhone] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleOpen = () => {
         setOpen(true);
@@ -70,7 +77,9 @@ export const Sms = ({ shortenedLink }) => {
                     <div className={classes.paper}>
                         {isAuthenticated ? (
                             <>
-                                <h2 id='transition-modal-title'>Send link</h2>
+                                <Typography component='h1' variant='h5' align='center'>
+                                    Send link
+                                </Typography>
                                 <form
                                     // TODO: Send Requests to Texting Service
                                     onSubmit={async (e) => {
@@ -84,6 +93,17 @@ export const Sms = ({ shortenedLink }) => {
                                         value={shortenedLink}
                                         fullWidth
                                     />
+                                    <MuiPhoneNumber
+                                        name='phone'
+                                        label='Phone Number'
+                                        data-cy='user-phone'
+                                        defaultCountry='us'
+                                        value={phone}
+                                        onChange={(value) => setPhone(value)}
+                                        autoFocus
+                                    // error={phone === ''}
+                                    // helperText='Invalid phone number'
+                                    />
                                     <TextField
                                         variant='outlined'
                                         margin='normal'
@@ -92,24 +112,40 @@ export const Sms = ({ shortenedLink }) => {
                                         id='message'
                                         label='Message body'
                                         name='message'
-                                        autoFocus
                                         multiline
+                                        value={message}
+                                        onChange={(e) => setMessage(e.target.value)}
                                     />
-                                    <Button
+                                    <PayPalScriptProvider
+                                        options={{
+                                            'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+                                            currency: 'USD',
+                                            intent: 'authorize',
+                                        }}
+                                    >
+                                        <PayPalIntegration
+                                            msgBody={message}
+                                            slug={slug}
+                                            recipient={phone} // FIXME: Remove Phone Number
+                                        />
+                                    </PayPalScriptProvider>
+
+                                    {/* <Button
                                         variant='contained'
                                         color='primary'
                                         type='submit'
                                         endIcon={<SendIcon />}
                                     >
                                         Send
-                                    </Button>
+                                    </Button> */}
                                 </form>
                             </>
                         ) : (
                             <>
-                                <h2 id='transition-modal-title'>
+                                <Typography component='h1' variant='h5' align='center' style={{ marginBottom: '-25px' }}>
                                     Must be logged in to send a text
-                                </h2>
+                                </Typography>
+
                                 {toggleSignup ? (
                                     <Signup setToggleSignup={setToggleSignup} />
                                 ) : (
@@ -126,4 +162,5 @@ export const Sms = ({ shortenedLink }) => {
 
 Sms.propTypes = {
     shortenedLink: PropTypes.string.isRequired,
+    slug: PropTypes.string.isRequired,
 };
