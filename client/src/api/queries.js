@@ -1,3 +1,5 @@
+import { getToken } from '../utils';
+
 const getGatewayURL = () => {
     if (process.env.NODE_ENV === 'development') {
         return process.env.REACT_APP_GATEWAY_URL;
@@ -13,6 +15,7 @@ export const createLink = async (link) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: getToken(),
         },
         body: JSON.stringify({ url: link }),
     });

@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PayPalButtons, FUNDING } from '@paypal/react-paypal-js';
+import {
+    PayPalButtons,
+    FUNDING,
+    PayPalScriptProvider,
+} from '@paypal/react-paypal-js';
 import { authorizeAndCapturePayment, instantiateOrder } from '../../api/paypal';
 
 export const PayPalIntegration = ({ msgBody, recipient, slug }) => {
@@ -13,17 +17,25 @@ export const PayPalIntegration = ({ msgBody, recipient, slug }) => {
 
     return (
         <>
-            <PayPalButtons
-                fundingSource={FUNDING.PAYPAL}
-                createOrder={() => createOrder()}
-                onApprove={(data, actions) => onApprove(data, actions)}
-            />
+            <PayPalScriptProvider
+                options={{
+                    'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+                    currency: 'USD',
+                    intent: 'authorize',
+                }}
+            >
+                <PayPalButtons
+                    fundingSource={FUNDING.PAYPAL}
+                    createOrder={() => createOrder()}
+                    onApprove={(data, actions) => onApprove(data, actions)}
+                />
 
-            <PayPalButtons
-                fundingSource={FUNDING.CARD}
-                createOrder={() => createOrder()}
-                onApprove={(data) => onApprove(data)}
-            />
+                <PayPalButtons
+                    fundingSource={FUNDING.CARD}
+                    createOrder={() => createOrder()}
+                    onApprove={(data) => onApprove(data)}
+                />
+            </PayPalScriptProvider>
         </>
     );
 };

@@ -1,6 +1,13 @@
 const httpProxy = require('express-http-proxy');
 
-const slugServiceProxy = httpProxy(process.env.SNATCHER_SHORTNER_SERVICE_HOST);
+const slugServiceProxy = httpProxy(process.env.SNATCHER_SHORTNER_SERVICE_HOST, {
+    proxyReqOptDecorator: (newReq, oldReq) => {
+        // eslint-disable-next-line no-param-reassign
+        newReq.headers.user = oldReq.user?.id || null;
+
+        return newReq;
+    },
+});
 
 exports.forwardToSlugService = async (req, res, next) => {
     try {

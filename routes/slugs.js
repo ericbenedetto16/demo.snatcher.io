@@ -16,4 +16,9 @@ router
         forwardToSlugService
     );
 
+router.route('/track/:slug').get(forwardToSlugService);
+router
+    .route('/getSlugs')
+    .post(authenticateUser, authorizeUser, forwardToSlugService);
+
 module.exports = router;
