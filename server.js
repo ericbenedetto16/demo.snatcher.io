@@ -25,6 +25,7 @@ const prodRouter = require('./routes/prodRouter');
 const defaultRouter = require('./routes');
 
 if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1); // Trust the NGINX Controller
     app.use(prodRouter);
 } else {
     app.use(defaultRouter);
