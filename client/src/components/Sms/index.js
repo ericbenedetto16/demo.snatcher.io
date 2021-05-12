@@ -10,7 +10,6 @@ import {
     TextField,
     Typography,
 } from '@material-ui/core';
-// eslint-disable-next-line no-unused-vars
 import { Sms as SmsIcon } from '@material-ui/icons';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
@@ -77,7 +76,11 @@ export const Sms = ({ shortenedLink, slug }) => {
                     <div className={classes.paper}>
                         {isAuthenticated ? (
                             <>
-                                <Typography component='h1' variant='h5' align='center'>
+                                <Typography
+                                    component='h1'
+                                    variant='h5'
+                                    align='center'
+                                >
                                     Send link
                                 </Typography>
                                 <form
@@ -112,11 +115,15 @@ export const Sms = ({ shortenedLink, slug }) => {
                                         name='message'
                                         multiline
                                         value={message}
-                                        onChange={(e) => setMessage(e.target.value)}
+                                        onChange={(e) => {
+                                            setMessage(e.target.value);
+                                        }}
                                     />
                                     <PayPalScriptProvider
                                         options={{
-                                            'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+                                            'client-id':
+                                                process.env
+                                                    .REACT_APP_PAYPAL_CLIENT_ID,
                                             currency: 'USD',
                                             intent: 'authorize',
                                         }}
@@ -125,14 +132,19 @@ export const Sms = ({ shortenedLink, slug }) => {
                                             key={message + phone}
                                             msgBody={message}
                                             slug={slug}
-                                            recipient={phone} // FIXME: Remove Phone Number
+                                            recipient={phone}
                                         />
                                     </PayPalScriptProvider>
                                 </form>
                             </>
                         ) : (
                             <>
-                                <Typography component='h1' variant='h5' align='center' style={{ marginBottom: '-25px' }}>
+                                <Typography
+                                    component='h1'
+                                    variant='h5'
+                                    align='center'
+                                    style={{ marginBottom: '-25px' }}
+                                >
                                     Must be logged in to send a text
                                 </Typography>
 
