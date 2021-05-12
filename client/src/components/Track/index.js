@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     makeStyles,
 } from '@material-ui/core';
@@ -76,15 +76,6 @@ export const Track = () => {
     const [lat, setLat] = useState(40.75);
     const [lng, setLng] = useState(-74);
 
-    // const center = {};
-
-    useEffect(() => {
-        // center = {
-        //     lat: lat,
-        //     lng: lng,
-        // };
-    }, [lat, lng]);
-
     // const async getAllData = () => {
     //     const res = await fetch(`${process.env.REACT_APP_TACKER_URL}/`);
     //     res = await res.json();
@@ -114,11 +105,13 @@ export const Track = () => {
                     Toolbar: GridToolbar,
                 }}
                 onRowClick={(rowData) => {
-                    setLat(rowData.row.latitude);
-                    setLng(rowData.row.longitude);
+                    // eslint-disable-next-line radix
+                    setLat(Number(rowData.row.latitude));
+                    // eslint-disable-next-line radix
+                    setLng(Number(rowData.row.longitude));
                 }}
             />
-            <Map lat={lat} lng={lng} zoom={10} />
+            <Map key={lat + lng} lat={lat} lng={lng} zoom={10} />
         </div>
     );
 };

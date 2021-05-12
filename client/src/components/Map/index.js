@@ -1,8 +1,6 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable react/prop-types */
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import GoogleMapReact from 'google-map-react';
+import PropTypes from 'prop-types';
 
 const containerStyle = {
     width: '400px',
@@ -20,3 +18,9 @@ export const Map = ({ lat, lng, zoom }) => (
         />
     </div>
 );
+
+Map.propTypes = {
+    lat: PropTypes.number.isRequired,
+    lng: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired,
+};
