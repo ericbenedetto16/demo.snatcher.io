@@ -11,7 +11,7 @@ import {
     Typography,
 } from '@material-ui/core';
 // eslint-disable-next-line no-unused-vars
-import { Sms as SmsIcon, Send as SendIcon } from '@material-ui/icons';
+import { Sms as SmsIcon } from '@material-ui/icons';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { Login } from '../Login';
@@ -101,8 +101,6 @@ export const Sms = ({ shortenedLink, slug }) => {
                                         value={phone}
                                         onChange={(value) => setPhone(value)}
                                         autoFocus
-                                    // error={phone === ''}
-                                    // helperText='Invalid phone number'
                                     />
                                     <TextField
                                         variant='outlined'
@@ -124,20 +122,12 @@ export const Sms = ({ shortenedLink, slug }) => {
                                         }}
                                     >
                                         <PayPalIntegration
+                                            key={message + phone}
                                             msgBody={message}
                                             slug={slug}
                                             recipient={phone} // FIXME: Remove Phone Number
                                         />
                                     </PayPalScriptProvider>
-
-                                    {/* <Button
-                                        variant='contained'
-                                        color='primary'
-                                        type='submit'
-                                        endIcon={<SendIcon />}
-                                    >
-                                        Send
-                                    </Button> */}
                                 </form>
                             </>
                         ) : (

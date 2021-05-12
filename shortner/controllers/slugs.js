@@ -8,7 +8,7 @@ exports.saveSlug = async (req, res) => {
 
         let obj;
 
-        if (req.headers.user && req.headers.user !== null) {
+        if (req.headers.user && req.headers.user !== 'null') {
             obj = await Url.create({
                 slug: req.slug,
                 fullUrl: url,

@@ -2,7 +2,7 @@ const { Model } = require('sequelize');
 
 // TODO: Add Optional Creator Information (UserId, etc.)
 module.exports = (sequelize, DataTypes) => {
-    class Url extends Model {}
+    class Url extends Model { }
 
     Url.init(
         {
@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             userId: {
                 type: DataTypes.INTEGER,
                 defaultValue: null,
+                allowNull: true,
             },
         },
         {

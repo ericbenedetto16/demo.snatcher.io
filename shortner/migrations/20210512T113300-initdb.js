@@ -21,7 +21,8 @@ var migrationCommands = [
                 "userId": {
                     "type": Sequelize.INTEGER,
                     "field": "userId",
-                    "defaultValue": null
+                    "defaultValue": null,
+                    "allowNull": true,
                 },
                 "createdAt": {
                     "type": Sequelize.DATE,
