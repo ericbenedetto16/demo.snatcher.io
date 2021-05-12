@@ -10,10 +10,6 @@ export const PayPalContainer = () => (
             intent: 'authorize',
         }}
     >
-        <PayPalIntegration
-            msgBody=''
-            slug=''
-            recipient='' // FIXME: Remove Phone Number
-        />
+        <PayPalIntegration msgBody='' slug='' recipient='' />
     </PayPalScriptProvider>
 );
