@@ -8,7 +8,6 @@ import { HomeContainer } from './containers/HomeContainer';
 import { TrackingContainer } from './containers/TrackingContainer';
 import { LoginContainer } from './containers/LoginContainer';
 import { SignupContainer } from './containers/SignupContainer';
-import { PayPalContainer } from './containers/PayPalContainer';
 import { Logout } from './components/Logout';
 
 ReactDOM.render(
@@ -21,7 +20,6 @@ ReactDOM.render(
             <Route path='/login/' component={LoginContainer} exact />
             <Route path='/signup/' component={SignupContainer} exact />
             <Route path='/logout/' component={Logout} exact />
-            <Route path='/paypal/' component={PayPalContainer} exact />
         </Switch>
     </Router>,
     document.getElementById('root')
