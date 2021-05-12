@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Grow } from '@material-ui/core';
 import { Sms as SmsIcon } from '@material-ui/icons';
@@ -7,7 +6,7 @@ import { useAuthentication } from '../../hooks';
 import { LoginSignupModal } from './LoginSignupModal';
 import { CreateSMSModal } from './CreateSMSModal';
 
-export const Sms = ({ shortenedLink, slug }) => {
+export const Sms = memo(({ shortenedLink, slug }) => {
     const isAuthenticated = useAuthentication();
     const [open, setOpen] = useState(false);
 
@@ -36,7 +35,7 @@ export const Sms = ({ shortenedLink, slug }) => {
             )}
         </>
     );
-};
+});
 
 Sms.propTypes = {
     shortenedLink: PropTypes.string.isRequired,
