@@ -1,7 +1,5 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable react/prop-types */
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
+import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 
 const containerStyle = {
@@ -12,7 +10,7 @@ const containerStyle = {
 export const Map = ({ lat, lng, zoom }) => (
     <div style={containerStyle}>
         <GoogleMapReact
-            bootstrapURLKeys={{ key: 'AIzaSyB-tcWSQnNsVizzw_gjC_01O52xS9KXHkM' }}
+            bootstrapURLKeys={{ key: process.env.REACT_APP_MAP_API_KEY }}
             defaultCenter={{ lat: 40.75, lng: -74 }}
             center={[lat, lng]}
             zoom={zoom}
@@ -20,3 +18,9 @@ export const Map = ({ lat, lng, zoom }) => (
         />
     </div>
 );
+
+Map.propTypes = {
+    lat: PropTypes.number.isRequired,
+    lng: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired,
+};
