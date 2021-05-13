@@ -7,11 +7,9 @@ import {
     Grid,
     Grow,
 } from '@material-ui/core';
-// import SmsIcon from '@material-ui/icons/Sms';
 import { Autocomplete } from '@material-ui/lab';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { createLink } from '../../api/queries';
-// import { useAuthentication } from '../../hooks';
 import { Sms } from '../Sms';
 
 const urlValidator = (url) => {
@@ -59,6 +57,7 @@ export const Shortner = () => {
     const [shortened, setShortened] = useState(null);
     const [domain, setDomain] = useState(DEFAULT_DOMAIN);
     const [canShorten, setCanShorten] = useState(false);
+    const [canEdit, setCanEdit] = useState(true);
 
     return (
         <>
@@ -67,11 +66,14 @@ export const Shortner = () => {
                     e.preventDefault();
                     const slug = await createLink(url);
 
+                    // Check if user is being rate limited to set a helper text.
+
                     // eslint-disable-next-line no-alert
                     if (!slug) alert('Error Creating Slug');
                     else {
                         setShortened(slug);
                         setCanShorten(false);
+                        setCanEdit(false);
                     }
                 }}
                 noValidate
@@ -92,7 +94,7 @@ export const Shortner = () => {
                             style={{ width: '100%' }}
                             autoFocus
                             defaultValue='https://'
-                            disabled={shortened}
+                            disabled={!canEdit}
                         />
                     </Grid>
 
@@ -183,15 +185,18 @@ export const Shortner = () => {
                             shortenedLink={`${domain}/${shortened}`}
                             slug={shortened}
                         />
-                        <Button
-                            onClick={() => {
-                                setShortened(false);
-                            }}
-                            variant='contained'
-                            color='secondary'
-                        >
-                            Cancel
-                        </Button>
+                        <Grow in timeout={1500}>
+                            <Button
+                                onClick={() => {
+                                    setShortened(false);
+                                    setCanEdit(true);
+                                }}
+                                variant='contained'
+                                color='secondary'
+                            >
+                                Cancel
+                            </Button>
+                        </Grow>
                     </Grid>
                 </Grid>
             ) : (
