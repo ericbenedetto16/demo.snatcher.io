@@ -25,7 +25,7 @@ export const PayPalIntegration = ({ msgBody, recipient, slug, dismiss }) => {
     };
 
     return (
-        <>
+        <div style={{ maxWidth: '750px', margin: '0 auto' }}>
             <PayPalScriptProvider
                 options={{
                     'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
@@ -45,7 +45,7 @@ export const PayPalIntegration = ({ msgBody, recipient, slug, dismiss }) => {
                     onApprove={(data) => onApprove(data)}
                 />
             </PayPalScriptProvider>
-        </>
+        </div>
     );
 };
 
