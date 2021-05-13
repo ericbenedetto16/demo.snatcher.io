@@ -10,6 +10,7 @@ const envs = [
     path.join(__dirname, '..', 'client', 'server', '.env'),
     path.join(__dirname, '..', 'tendies', '.env'),
     path.join(__dirname, '..', 'shortner', '.env'),
+    path.join(__dirname, '..', 'digits', '.env'),
     path.join(__dirname, '..', '.env'),
 ];
 

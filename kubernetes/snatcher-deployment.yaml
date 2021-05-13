@@ -51,6 +51,19 @@ spec:
       port: 80
       targetPort: 8082
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: snatcher-digits
+spec:
+  selector:
+    app: snatcher-digits
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 8083
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -129,6 +142,8 @@ spec:
       - name: snatcher-tendies
         image: registry.digitalocean.com/snatcher/snatcher-tendies
         env:
+        - name: NODE_ENV
+          value: production
         - name: PAYPAL_CLIENT_ID
           value: REPLACE
         - name: PAYPAL_SECRET
@@ -160,7 +175,40 @@ spec:
         env:
         - name: REACT_APP_GATEWAY_URL
           value: 'https://gateway.snatcher.link'
-        - name: PAYPAL_SECRET
+        - name: REACT_APP_PAYPAL_CLIENT_ID
+          value: REPLACE
+        - name: REACT_APP_MAP_API_KEY
+          value: REPLACE
+        ports:
+          - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snatcher-digits-deployment
+  labels:
+    app: snatcher-digits
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snatcher-digits
+  template:
+    metadata:
+      labels:
+        app: snatcher-digits
+    spec:
+      containers:
+      - name: snatcher-digits
+        image: registry.digitalocean.com/snatcher/snatcher-digits
+        env:
+        - name: NODE_ENV
+          value: 'production'
+        - name: TWILIO_ACCOUNT_SID
+          value: REPLACE
+        - name: TWILIO_AUTH_TOKEN
+          value: REPLACE
+        - name: TWILIO_NUMBER
           value: REPLACE
         ports:
           - containerPort: 3000
