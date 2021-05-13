@@ -4,7 +4,7 @@ const { voidAuthorization } = require('../controllers/payments');
 exports.sendSMS = async (req, res, next) => {
     try {
         const smsRes = await fetch(
-            `${process.env.SNATCHER_DIGITS_SERVICE_HOST}/sendSMS`,
+            `http://${process.env.SNATCHER_DIGITS_SERVICE_HOST}/sendSMS`,
             {
                 method: 'POST',
                 headers: {
@@ -15,7 +15,6 @@ exports.sendSMS = async (req, res, next) => {
         );
 
         if ((await smsRes.json()).success === false) {
-            console.log('we here');
             return voidAuthorization(req, res, next);
         }
 
