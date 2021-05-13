@@ -6,9 +6,13 @@ cd shortner
 
 docker build -t snatcher-shortner .
 
-cd../tendies
+cd ../tendies
 
 docker build -t snatcher-tendies .
+
+cd ../digits
+
+docker build -t snatcher-digits .
 
 cd ../client
 
@@ -22,6 +26,8 @@ docker tag snatcher-tendies registry.digitalocean.com/snatcher/snatcher-tendies
 
 docker tag snatcher-shortner registry.digitalocean.com/snatcher/snatcher-shortner
 
+docker tag snatcher-digits registry.digitalocean.com/snatcher/snatcher-digits
+
 docker tag snatcher-client registry.digitalocean.com/snatcher/snatcher-client
 
 docker push registry.digitalocean.com/snatcher/snatcher-gateway
@@ -29,5 +35,7 @@ docker push registry.digitalocean.com/snatcher/snatcher-gateway
 docker push registry.digitalocean.com/snatcher/snatcher-tendies
 
 docker push registry.digitalocean.com/snatcher/snatcher-shortner
+
+docker push registry.digitalocean.com/snatcher/snatcher-digits
 
 docker push registry.digitalocean.com/snatcher/snatcher-client
