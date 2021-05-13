@@ -9,7 +9,7 @@ exports.formatRecipient = (req, res, next) => {
 exports.injectLink = (req, res, next) => {
     const regex = /{URL}/g;
     if (regex.test(req.body.msgBody) === false) {
-        req.msgBody = `${req.body.msgBody} ${req.body.slug}`;
+        req.msgBody = `${req.body.msgBody} ${req.body.slug} `;
 
         return next();
     }
