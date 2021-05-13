@@ -41,19 +41,26 @@ const useStyles = makeStyles((theme) => ({
     },
     toolbar: theme.mixins.toolbar,
 }));
-
 export const Header = () => {
     const location = useLocation();
 
-    useEffect(() => { }, [location]);
+    useEffect(() => {}, [location]);
 
     const COLLAPSE_THRESHOLD = 900;
     const classes = useStyles();
-    const [windowWidth, setWidth] = useState(window.innerWidth);
+    const [collapse, setCollapse] = useState(
+        window.innerWidth <= COLLAPSE_THRESHOLD
+    );
     const [drawer, setDrawer] = useState(false);
 
     window.onresize = () => {
-        setWidth(window.innerWidth);
+        if (window.innerWidth <= COLLAPSE_THRESHOLD && !collapse) {
+            setCollapse(true);
+        }
+
+        if (window.innerWidth > COLLAPSE_THRESHOLD && collapse) {
+            setCollapse(false);
+        }
     };
 
     const logged = useAuthentication();
@@ -68,7 +75,7 @@ export const Header = () => {
     ];
 
     const iconRenderer = () => {
-        if (windowWidth < COLLAPSE_THRESHOLD) {
+        if (collapse) {
             return (
                 <>
                     <IconButton
@@ -112,7 +119,7 @@ export const Header = () => {
     };
 
     const menuRenderer = () => {
-        if (windowWidth > COLLAPSE_THRESHOLD) {
+        if (!collapse) {
             return LINKS.map(({ name, href }) => (
                 <Link
                     component={RouterLink}
