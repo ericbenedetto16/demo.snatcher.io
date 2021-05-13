@@ -23,6 +23,13 @@ exports.registerUser = async (req, res, next) => {
             msg: 'Registration Successful',
         });
     } catch (err) {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({
+                success: false,
+                msg: 'Email Already In Use',
+            });
+        }
+
         // eslint-disable-next-line no-console
         console.log(err);
 

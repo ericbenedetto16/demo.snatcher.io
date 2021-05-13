@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, Link as RouterLink } from 'react-router-dom';
 import {
@@ -11,6 +11,11 @@ import {
     Container,
     makeStyles,
 } from '@material-ui/core/';
+import {
+    loadCaptchaEnginge,
+    LoadCanvasTemplateNoReload,
+    validateCaptcha,
+} from 'react-simple-captcha';
 import { GATEWAY_URL } from '../../api/queries';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,8 +50,16 @@ export const Signup = ({ setToggleSignup }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [emailInUse, setEmailInUse] = useState(false);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [captcha, setCaptcha] = useState(false);
+    const [captchaError, setCaptchaError] = useState(false);
+    const [captchaInput, setCaptchaInput] = useState('');
+
+    useEffect(() => {
+        if (captcha) loadCaptchaEnginge(6);
+    }, [captcha]);
 
     return (
         <Container component='main' maxWidth='xs'>
@@ -61,6 +74,20 @@ export const Signup = ({ setToggleSignup }) => {
                     onSubmit={async (e) => {
                         try {
                             e.preventDefault();
+                            setCaptchaError(false);
+
+                            if (!captcha) {
+                                setCaptcha(true);
+                                return;
+                            }
+
+                            if (validateCaptcha(captchaInput) === false) {
+                                setCaptchaError(true);
+                                return;
+                            }
+
+                            setCaptcha(false);
+                            setEmailInUse(false);
 
                             const payload = {
                                 firstName,
@@ -79,6 +106,11 @@ export const Signup = ({ setToggleSignup }) => {
                                     body: JSON.stringify(payload),
                                 }
                             );
+
+                            if (res.status === 409) {
+                                setEmailInUse(true);
+                                return;
+                            }
 
                             const json = await res.json();
 
@@ -138,6 +170,12 @@ export const Signup = ({ setToggleSignup }) => {
                                 name='email'
                                 autoComplete='email'
                                 type='email'
+                                error={emailInUse}
+                                helperText={
+                                    emailInUse
+                                        ? 'Email Address Already In Use'
+                                        : ''
+                                }
                                 onChange={(e) => {
                                     setEmail(e.target.value);
                                 }}
@@ -190,9 +228,35 @@ export const Signup = ({ setToggleSignup }) => {
                         variant='contained'
                         color='primary'
                         className={classes.submit}
+                        disabled={captcha}
                     >
                         Sign Up
                     </Button>
+                    {captcha === true ? (
+                        <Grid item sm={4} xs={12}>
+                            <div>
+                                <LoadCanvasTemplateNoReload />
+                                <TextField
+                                    id='captcha-input'
+                                    label='Captcha Value'
+                                    onChange={(e) => {
+                                        setCaptchaInput(e.target.value);
+                                    }}
+                                    error={captchaError}
+                                    helperText={
+                                        captchaError
+                                            ? 'Captcha Did Not Match'
+                                            : ''
+                                    }
+                                />
+                                <Button type='submit' variant='contained'>
+                                    Submit
+                                </Button>
+                            </div>
+                        </Grid>
+                    ) : (
+                        []
+                    )}
                     <Grid container justify='flex-end'>
                         <Grid item>
                             <p className={classes.inline}>
