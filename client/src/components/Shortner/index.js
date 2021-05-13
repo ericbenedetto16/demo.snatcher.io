@@ -92,6 +92,7 @@ export const Shortner = () => {
                             style={{ width: '100%' }}
                             autoFocus
                             defaultValue='https://'
+                            disabled={shortened}
                         />
                     </Grid>
 
@@ -101,7 +102,9 @@ export const Shortner = () => {
                             color='primary'
                             variant='contained'
                             fullWidth
-                            disabled={url === '' || !canShorten || !urlValidator(url)}
+                            disabled={
+                                url === '' || !canShorten || !urlValidator(url)
+                            }
                         >
                             Shorten
                         </Button>
@@ -153,9 +156,13 @@ export const Shortner = () => {
                                                 aria-label='Copy to Clipboard'
                                                 onClick={() => {
                                                     document
-                                                        .querySelector('#generated-url')
+                                                        .querySelector(
+                                                            '#generated-url'
+                                                        )
                                                         .select();
-                                                    document.execCommand('copy');
+                                                    document.execCommand(
+                                                        'copy'
+                                                    );
                                                 }}
                                             >
                                                 <FileCopyIcon />
@@ -166,8 +173,25 @@ export const Shortner = () => {
                             />
                         </Grow>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Sms shortenedLink={`${domain}/${shortened}`} slug={shortened} />
+                    <Grid
+                        container
+                        direction='row'
+                        justify='space-between'
+                        style={{ padding: '8px' }}
+                    >
+                        <Sms
+                            shortenedLink={`${domain}/${shortened}`}
+                            slug={shortened}
+                        />
+                        <Button
+                            onClick={() => {
+                                setShortened(false);
+                            }}
+                            variant='contained'
+                            color='secondary'
+                        >
+                            Cancel
+                        </Button>
                     </Grid>
                 </Grid>
             ) : (

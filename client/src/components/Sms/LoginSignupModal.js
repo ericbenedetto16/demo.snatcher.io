@@ -43,23 +43,20 @@ export const LoginSignupModal = ({ open, setOpen }) => {
         >
             <Fade in={open}>
                 <div className={classes.paper}>
-                    (
-                    <>
-                        <Typography
-                            component='h1'
-                            variant='h5'
-                            align='center'
-                            style={{ marginBottom: '-25px' }}
-                        >
-                            Must be logged in to send a text
-                        </Typography>
+                    <Typography
+                        component='h1'
+                        variant='h5'
+                        align='center'
+                        style={{ marginBottom: '-25px' }}
+                    >
+                        Must be logged in to send a text
+                    </Typography>
 
-                        {toggleSignup ? (
-                            <Signup setToggleSignup={setToggleSignup} />
-                        ) : (
-                            <Login setToggleSignup={setToggleSignup} />
-                        )}
-                    </>
+                    {toggleSignup ? (
+                        <Signup setToggleSignup={setToggleSignup} />
+                    ) : (
+                        <Login setToggleSignup={setToggleSignup} />
+                    )}
                 </div>
             </Fade>
         </Modal>
