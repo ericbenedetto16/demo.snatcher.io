@@ -42,7 +42,7 @@ exports.createOrder = async (req, res) => {
         // Save New Order in Database
         await Order.create({
             userId: req.user,
-            slug: slug.replace(/http[s]?:\/\/[a-zA-Z]*\.[a-zA-Z]*\//, ''),
+            slug: slug.replace(/http[s]?:\/\/[a-zA-Z\d]*[.:][a-zA-Z\d]*\//, ''),
             recipient,
             msgBody,
             paypalOrderId: order.id,
