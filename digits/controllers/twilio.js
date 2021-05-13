@@ -2,9 +2,8 @@ const client = require('twilio')();
 
 exports.sendSMS = async (req, res) => {
     try {
-        const { msgBody } = req.body;
         const msg = await client.messages.create({
-            body: msgBody,
+            body: req.msgBody,
             from: process.env.TWILIO_NUMBER,
             to: req.formattedRecipient,
         });

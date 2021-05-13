@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
-import {
-    makeStyles,
-} from '@material-ui/core';
-=======
-import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
->>>>>>> 7bd9c13dd881110e5ad41993c976c8636fb81dbd
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { Map } from '../Map';
 

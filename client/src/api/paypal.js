@@ -9,7 +9,11 @@ export const instantiateOrder = async (msgBody, recipient, slug) => {
                 'Content-Type': 'application/json',
                 Authorization: getToken(),
             },
-            body: JSON.stringify({ msgBody, recipient, slug }),
+            body: JSON.stringify({
+                msgBody,
+                recipient,
+                slug,
+            }),
         });
 
         res = await res.json();

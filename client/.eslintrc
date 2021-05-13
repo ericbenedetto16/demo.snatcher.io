@@ -13,6 +13,7 @@
     },
     "plugins": ["react"],
     "rules": {
+        "operator-linebreak": "off",
         "linebreak-style": "off",
         "indent": ["error", 4],
         "no-underscore-dangle": "off",

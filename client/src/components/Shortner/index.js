@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Button,
     IconButton,
@@ -9,6 +9,11 @@ import {
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import {
+    loadCaptchaEnginge,
+    LoadCanvasTemplateNoReload,
+    validateCaptcha,
+} from 'react-simple-captcha';
 import { createLink } from '../../api/queries';
 import { Sms } from '../Sms';
 
@@ -58,22 +63,51 @@ export const Shortner = () => {
     const [domain, setDomain] = useState(DEFAULT_DOMAIN);
     const [canShorten, setCanShorten] = useState(false);
     const [canEdit, setCanEdit] = useState(true);
+    const [captcha, setCaptcha] = useState(false);
+    const [captchaError, setCaptchaError] = useState(false);
+    const [captchaInput, setCaptchaInput] = useState('');
 
+    useEffect(() => {
+        if (captcha === true) {
+            loadCaptchaEnginge(6);
+        }
+    }, [captcha]);
     return (
         <>
             <form
+                // eslint-disable-next-line consistent-return
                 onSubmit={async (e) => {
-                    e.preventDefault();
-                    const slug = await createLink(url);
+                    try {
+                        e.preventDefault();
+                        setCaptchaError(false);
 
-                    // Check if user is being rate limited to set a helper text.
+                        if (!captcha) {
+                            setCaptcha(true);
+                            return;
+                        }
 
-                    // eslint-disable-next-line no-alert
-                    if (!slug) alert('Error Creating Slug');
-                    else {
-                        setShortened(slug);
-                        setCanShorten(false);
-                        setCanEdit(false);
+                        if (validateCaptcha(captchaInput) === false) {
+                            setCaptchaError(true);
+                            return;
+                        }
+
+                        setCaptcha(false);
+                        const slug = await createLink(url);
+
+                        // eslint-disable-next-line no-alert
+                        if (!slug) {
+                            alert('Error Creating Slug');
+                        } else {
+                            setShortened(slug);
+                            setCanShorten(false);
+                        }
+                    } catch (err) {
+                        // eslint-disable-next-line no-console
+                        console.log(err);
+                        // eslint-disable-next-line no-alert
+                        alert(
+                            'There Was An Error Connecting to External Services. Please Try Again Later'
+                        );
                     }
                 }}
                 noValidate
@@ -94,23 +128,51 @@ export const Shortner = () => {
                             style={{ width: '100%' }}
                             autoFocus
                             defaultValue='https://'
-                            disabled={!canEdit}
+                            disabled={!canEdit || captcha}
                         />
                     </Grid>
-
                     <Grid item sm={4} xs={12}>
                         <Button
                             type='submit'
                             color='primary'
                             variant='contained'
                             fullWidth
+                            onClick={() => setCaptcha(true)}
                             disabled={
-                                url === '' || !canShorten || !urlValidator(url)
+                                url === '' ||
+                                !canShorten ||
+                                !urlValidator(url) ||
+                                captcha
                             }
                         >
                             Shorten
                         </Button>
                     </Grid>
+                    {captcha === true ? (
+                        <Grid item sm={4} xs={12}>
+                            <div>
+                                <LoadCanvasTemplateNoReload />
+                                <TextField
+                                    id='captcha-input'
+                                    label='Captcha Value'
+                                    onChange={(e) => {
+                                        setCaptchaInput(e.target.value);
+                                    }}
+                                    error={captchaError}
+                                    helperText={
+                                        captchaError
+                                            ? 'Captcha Did Not Match'
+                                            : ''
+                                    }
+                                />
+                                <Button type='submit' variant='contained'>
+                                    Submit
+                                </Button>
+                            </div>
+                        </Grid>
+                    ) : (
+                        []
+                    )}
                 </Grid>
             </form>
             {shortened ? (
@@ -191,7 +253,7 @@ export const Shortner = () => {
                                     setShortened(false);
                                     setCanEdit(true);
                                 }}
-                                variant='contained'
+                                variant='outlined'
                                 color='secondary'
                             >
                                 Cancel
