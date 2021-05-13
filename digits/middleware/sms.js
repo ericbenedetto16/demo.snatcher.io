@@ -14,6 +14,6 @@ exports.injectLink = (req, res, next) => {
         return next();
     }
 
-    req.msgBody = req.body.msgBody.replace(regex, req.body.slug);
+    req.msgBody = req.body.msgBody.replace(regex, ` ${req.body.slug} `);
     next();
 };
