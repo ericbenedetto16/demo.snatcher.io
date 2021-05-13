@@ -80,6 +80,8 @@ export const Login = ({ setToggleSignup }) => {
                                 }
                             );
 
+                            if (res.status === 429) alert('Slow Down Hotshot');
+
                             const json = await res.json();
 
                             if (!json.success) {

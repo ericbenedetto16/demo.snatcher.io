@@ -20,6 +20,8 @@ export const createLink = async (link) => {
         body: JSON.stringify({ url: link }),
     });
 
+    if (res.status === 429) alert('Slow Down Hotshot');
+
     res = await res.json();
 
     if (res.success) return res.slug;

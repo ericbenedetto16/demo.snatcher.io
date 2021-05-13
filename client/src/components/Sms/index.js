@@ -14,7 +14,7 @@ export const Sms = ({ shortenedLink, slug }) => {
         <>
             <Grow in timeout={1500}>
                 <Button
-                    variant='outlined'
+                    variant='contained'
                     color='primary'
                     endIcon={<SmsIcon />}
                     onClick={() => setOpen(true)}

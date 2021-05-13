@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { sendSMS } = require('../controllers/twilio');
-const { formatRecipient } = require('../middleware/sms');
+const { formatRecipient, injectLink } = require('../middleware/sms');
 
-router.route('/sendSms').post(formatRecipient, sendSMS);
+router.route('/sendSms').post(formatRecipient, injectLink, sendSMS);
 
 module.exports = router;

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // eslint-disable-next-line object-curly-newline
-export const CreateSMSModal = ({ open, setOpen, shortenedLink, slug }) => {
+export const CreateSMSModal = ({ open, setOpen, shortenedLink }) => {
     const classes = useStyles();
     const [edit, setEdit] = useState(true);
     const [phone, setPhone] = useState('');
@@ -93,6 +93,8 @@ export const CreateSMSModal = ({ open, setOpen, shortenedLink, slug }) => {
                                 onChange={(e) => {
                                     setMessage(e.target.value);
                                 }}
+                                placeholder='Click on this link {URL} to see magic.'
+                                helperText='Use {URL} to add the URL to your message. By default it will be added to the end.'
                                 disabled={!edit}
                             />
                             {!edit ? (
@@ -131,7 +133,7 @@ export const CreateSMSModal = ({ open, setOpen, shortenedLink, slug }) => {
                                     <PayPalIntegration
                                         key={message + phone}
                                         msgBody={message}
-                                        slug={slug}
+                                        slug={shortenedLink}
                                         recipient={phone}
                                     />
                                 </>
@@ -156,5 +158,4 @@ CreateSMSModal.propTypes = {
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
     shortenedLink: PropTypes.string.isRequired,
-    slug: PropTypes.string.isRequired,
 };
