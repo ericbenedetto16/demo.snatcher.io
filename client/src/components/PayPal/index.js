@@ -7,12 +7,21 @@ import {
 } from '@paypal/react-paypal-js';
 import { authorizeAndCapturePayment, instantiateOrder } from '../../api/paypal';
 
-export const PayPalIntegration = ({ msgBody, recipient, slug }) => {
+// eslint-disable-next-line object-curly-newline
+export const PayPalIntegration = ({ msgBody, recipient, slug, dismiss }) => {
     // eslint-disable-next-line consistent-return
     const createOrder = async () => instantiateOrder(msgBody, recipient, slug);
 
     const onApprove = async (data) => {
-        await authorizeAndCapturePayment(data, msgBody, recipient, slug);
+        const succ = await authorizeAndCapturePayment(
+            data,
+            msgBody,
+            recipient,
+            slug
+        );
+        if (succ) {
+            dismiss();
+        }
     };
 
     return (
@@ -44,4 +53,5 @@ PayPalIntegration.propTypes = {
     msgBody: PropTypes.string.isRequired,
     recipient: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
+    dismiss: PropTypes.func.isRequired,
 };

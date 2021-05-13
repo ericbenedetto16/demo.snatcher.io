@@ -88,10 +88,12 @@ exports.voidAuthorization = async (req, res) => {
             { where: { paypalAuthorizationId: authorizationID } }
         );
 
-        res.status(500).json({
-            success: true,
-            msg: 'Transaction Aborted Due to Server Error, Payment Voided',
-        });
+        if (req.twilioError) {
+            return res.status(400).json({
+                success: false,
+                msg: req.twilioError,
+            });
+        }
     } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err);

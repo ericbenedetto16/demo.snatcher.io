@@ -14,7 +14,9 @@ exports.sendSMS = async (req, res, next) => {
             }
         );
 
-        if ((await smsRes.json()).success === false) {
+        const json = await smsRes.json();
+        if (json.success === false) {
+            req.twilioError = json.msg;
             return voidAuthorization(req, res, next);
         }
 

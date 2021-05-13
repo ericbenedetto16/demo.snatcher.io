@@ -21,6 +21,13 @@ exports.sendSMS = async (req, res) => {
             msg: 'Message Sent Successfully',
         });
     } catch (err) {
+        if (err.status === 400 && err.code === 21211) {
+            return res.status(400).json({
+                success: false,
+                msg: 'Invalid Phone Number',
+            });
+        }
+
         // eslint-disable-next-line no-console
         console.log(err);
 

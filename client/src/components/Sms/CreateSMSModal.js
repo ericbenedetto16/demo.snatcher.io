@@ -135,6 +135,7 @@ export const CreateSMSModal = ({ open, setOpen, shortenedLink }) => {
                                         msgBody={message}
                                         slug={shortenedLink}
                                         recipient={phone}
+                                        dismiss={() => setOpen(false)}
                                     />
                                 </>
                             ) : (

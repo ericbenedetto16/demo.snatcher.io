@@ -30,9 +30,10 @@ export const authorizeAndCapturePayment = async (
     msgBody,
     recipient,
     slug
+    // eslint-disable-next-line consistent-return
 ) => {
     try {
-        await fetch(`${GATEWAY_URL}/payments/authorize`, {
+        const res = await fetch(`${GATEWAY_URL}/payments/authorize`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -46,7 +47,23 @@ export const authorizeAndCapturePayment = async (
             }),
         });
 
-        return;
+        const json = await res.json();
+        if (res.status === 400) {
+            alert(json.msg);
+        }
+
+        if (res.status === 500) {
+            alert(
+                'There Was an Error Processing Your Transaction. Please Try Again Later'
+            );
+        }
+
+        if (res.status === 200) {
+            alert('SMS Sent Successfully');
+            return true;
+        }
+
+        return false;
     } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err);
