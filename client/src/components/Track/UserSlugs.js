@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Grid } from '@material-ui/core';
 import { GATEWAY_URL } from '../../api/queries';
 import { getToken } from '../../utils';
 
@@ -39,8 +39,9 @@ const columns = [
 
 const useStyles = makeStyles({
     root: {
-        height: 400,
-        width: '100%',
+        height: 475,
+        margin: '0 auto',
+        width: '80%',
         '& .super-app-theme--header': {
             backgroundColor: '#e0e0e0',
         },
@@ -81,26 +82,30 @@ export const UserSlugs = () => {
 
     if (loading) return <p>Loading...</p>;
     return (
-        <div className={classes.root}>
-            <DataGrid
-                autoPageSize
-                page={page}
-                onPageChange={(params) => {
-                    setPage(params.page);
-                }}
-                id='slug'
-                pageSize={5}
-                pagination
-                rows={slugs}
-                columns={columns}
-                components={{
-                    Toolbar: GridToolbar,
-                }}
-                getRowId={(row) => row.slug}
-                onRowClick={(rowData) => {
-                    history.push(`/track/${rowData.id}`);
-                }}
-            />
-        </div>
+        <Grid container spacing={2} justify='center'>
+            <Grid item sm={12} xs={12}>
+                <div className={classes.root}>
+                    <DataGrid
+                        autoPageSize
+                        page={page}
+                        onPageChange={(params) => {
+                            setPage(params.page);
+                        }}
+                        id='slug'
+                        pageSize={5}
+                        pagination
+                        rows={slugs}
+                        columns={columns}
+                        components={{
+                            Toolbar: GridToolbar,
+                        }}
+                        getRowId={(row) => row.slug}
+                        onRowClick={(rowData) => {
+                            history.push(`/track/${rowData.id}`);
+                        }}
+                    />
+                </div>
+            </Grid>
+        </Grid>
     );
 };

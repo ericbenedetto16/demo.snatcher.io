@@ -14,8 +14,28 @@ export const getSlugs = async () => {
         const json = await res.json();
 
         if (json.success === true) {
-            console.log(json);
-            return json;
+            return json.slugs;
+        }
+
+        return null;
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        // eslint-disable-next-line no-console
+        console.error('Error Sending Token to Auth Server');
+        return null;
+    }
+};
+
+export const trackSlug = async (slug) => {
+    try {
+        const res = await fetch(`${GATEWAY_URL}/track/${slug}`);
+        if (res.status === 401 || res.status === 403) return null;
+
+        const json = await res.json();
+
+        if (json.success === true) {
+            return json.trackers;
         }
 
         return null;

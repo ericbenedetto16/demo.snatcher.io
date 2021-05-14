@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Grid } from '@material-ui/core';
 import { GATEWAY_URL } from '../../api/queries';
+import { Map as GoogleMap } from '../Map';
 
 const columns = [
     {
@@ -65,8 +66,9 @@ const columns = [
 
 const useStyles = makeStyles({
     root: {
-        height: 400,
-        width: '100%',
+        height: 475,
+        margin: '0 auto',
+        width: '80%',
         '& .super-app-theme--header': {
             backgroundColor: '#e0e0e0',
         },
@@ -78,6 +80,7 @@ export const SingleSlug = () => {
     const urlParams = useParams();
     const [data, setData] = useState([]);
     const [page, setPage] = useState(0);
+    const [reloadMap, setReloadMap] = useState(false);
 
     const classes = useStyles();
 
@@ -103,21 +106,35 @@ export const SingleSlug = () => {
     if (loading) return <></>;
 
     return (
-        <div className={classes.root}>
-            <DataGrid
-                autoPageSize
-                page={page}
-                onPageChange={(params) => {
-                    setPage(params.page);
-                }}
-                pageSize={5}
-                pagination
-                rows={data}
-                columns={columns}
-                components={{
-                    Toolbar: GridToolbar,
-                }}
-            />
-        </div>
+
+        <Grid container spacing={2} justify='center'>
+            <Grid item sm={12} xs={12}>
+                <div className={classes.root}>
+                    <DataGrid
+                        autoPageSize
+                        page={page}
+                        onPageChange={(params) => {
+                            setPage(params.page);
+                        }}
+                        pageSize={5}
+                        pagination
+                        rows={data}
+                        columns={columns}
+                        components={{
+                            Toolbar: GridToolbar,
+                        }}
+                        onRowClick={() => {
+                            // eslint-disable-next-line no-unused-expressions
+                            reloadMap ? setReloadMap(false) : setReloadMap(true);
+                        }}
+                    />
+                </div>
+            </Grid>
+            <Grid>
+                {/* eslint-disable-next-line max-len */}
+                <GoogleMap key={reloadMap} lat={data[0].latitude} lng={data[0].longitude} zoom={10} />
+            </Grid>
+        </Grid>
+
     );
 };

@@ -97,16 +97,6 @@ export const TrackerInput = () => {
                                         color='primary'
                                         variant='contained'
                                         fullWidth
-                                        // onSubmit={() => history.push(`/track/${slug}`)}
-                                        onClick={() => {
-                                            history.push(`/track/${trackerId}`);
-                                        }}
-                                        // disabled={
-                                        //     url === '' ||
-                                        //     !canShorten ||
-                                        //     !urlValidator(url) ||
-                                        //     captcha
-                                        // }
                                     >
                                         Track Link
                                     </Button>
