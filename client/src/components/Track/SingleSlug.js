@@ -75,14 +75,31 @@ const useStyles = makeStyles({
     },
 });
 
+// 40.724360,-73.823897
+
+const DEFAULT_CENTER = {
+    lat: 40.724360,
+    lng: -73.823897,
+};
+
 export const SingleSlug = () => {
+    const classes = useStyles();
     const [loading, setLoading] = useState(true);
     const urlParams = useParams();
     const [data, setData] = useState([]);
     const [page, setPage] = useState(0);
     const [reloadMap, setReloadMap] = useState(false);
+    const [lat, setLat] = useState(DEFAULT_CENTER.lat);
+    const [lng, setLng] = useState(DEFAULT_CENTER.lng);
 
-    const classes = useStyles();
+    useEffect(() => {
+        if (!loading) {
+            if (data.length > 0) {
+                setLat(data[0].latitude);
+                setLng(data[0].longitude);
+            }
+        }
+    }, [loading]);
 
     useEffect(() => {
         let cancelled = false;
@@ -130,9 +147,11 @@ export const SingleSlug = () => {
                     />
                 </div>
             </Grid>
-            <Grid>
-                {/* eslint-disable-next-line max-len */}
-                <GoogleMap key={reloadMap} lat={data[0].latitude} lng={data[0].longitude} zoom={10} />
+            <Grid item sm={12} xs={12}>
+                <div className={classes.root}>
+                    {/* eslint-disable-next-line max-len */}
+                    <GoogleMap key={reloadMap} lat={lat || data[0].latitude} lng={lng || data[0].longitude} zoom={10} DEFAULT_CENTER={DEFAULT_CENTER} />
+                </div>
             </Grid>
         </Grid>
 
