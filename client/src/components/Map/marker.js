@@ -5,7 +5,7 @@ import RoomIcon from '@material-ui/icons/Room';
 const radiusStyle = {
     width: '30px',
     height: '30px',
-    backgroundColor: 'rgba(20,20,20,0.5)',
+    backgroundColor: 'rgba(20,20,20,0.4)',
     borderRadius: '50%',
     position: 'absolute',
     transform: 'translate(-50%, -50%)',

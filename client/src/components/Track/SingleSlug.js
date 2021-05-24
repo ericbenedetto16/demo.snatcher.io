@@ -75,8 +75,6 @@ const useStyles = makeStyles({
     },
 });
 
-// 40.724360,-73.823897
-
 const DEFAULT_CENTER = {
     lat: 40.724360,
     lng: -73.823897,
@@ -88,15 +86,16 @@ export const SingleSlug = () => {
     const urlParams = useParams();
     const [data, setData] = useState([]);
     const [page, setPage] = useState(0);
-    const [reloadMap, setReloadMap] = useState(false);
     const [lat, setLat] = useState(DEFAULT_CENTER.lat);
     const [lng, setLng] = useState(DEFAULT_CENTER.lng);
+    const [zoom, setZoom] = useState(1);
 
     useEffect(() => {
         if (!loading) {
             if (data.length > 0) {
                 setLat(data[0].latitude);
                 setLng(data[0].longitude);
+                setZoom(11);
             }
         }
     }, [loading]);
@@ -140,9 +139,10 @@ export const SingleSlug = () => {
                         components={{
                             Toolbar: GridToolbar,
                         }}
-                        onRowClick={() => {
+                        onRowClick={(rowData) => {
                             // eslint-disable-next-line no-unused-expressions
-                            reloadMap ? setReloadMap(false) : setReloadMap(true);
+                            setLat(rowData.row.latitude);
+                            setLng(rowData.row.longitude);
                         }}
                     />
                 </div>
@@ -150,7 +150,7 @@ export const SingleSlug = () => {
             <Grid item sm={12} xs={12}>
                 <div className={classes.root}>
                     {/* eslint-disable-next-line max-len */}
-                    <GoogleMap key={reloadMap} lat={lat || data[0].latitude} lng={lng || data[0].longitude} zoom={10} DEFAULT_CENTER={DEFAULT_CENTER} />
+                    <GoogleMap lat={lat} lng={lng} data={data} zoom={zoom} DEFAULT_CENTER={DEFAULT_CENTER} />
                 </div>
             </Grid>
         </Grid>
