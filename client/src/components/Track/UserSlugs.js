@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { makeStyles, Grid } from '@material-ui/core';
+import { makeStyles, Grid, CssBaseline } from '@material-ui/core';
 import { GATEWAY_URL } from '../../api/queries';
 import { getToken } from '../../utils';
 
@@ -16,7 +16,7 @@ const columns = [
     },
     {
         field: 'slug',
-        headerName: 'Slug',
+        headerName: 'Tracking Code',
         width: 150,
         flex: 0.75,
         headerClassName: 'super-app-theme--header',
@@ -37,7 +37,11 @@ const columns = [
     },
 ];
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+    container: {
+        backgroundColor: theme.palette.background.paper,
+    },
+
     root: {
         height: 475,
         margin: '0 auto',
@@ -46,7 +50,7 @@ const useStyles = makeStyles({
             backgroundColor: '#e0e0e0',
         },
     },
-});
+}));
 
 export const UserSlugs = () => {
     const [loading, setLoading] = useState(true);
@@ -82,30 +86,41 @@ export const UserSlugs = () => {
 
     if (loading) return <p>Loading...</p>;
     return (
-        <Grid container spacing={2} justify='center'>
-            <Grid item sm={12} xs={12}>
-                <div className={classes.root}>
-                    <DataGrid
-                        autoPageSize
-                        page={page}
-                        onPageChange={(params) => {
-                            setPage(params.page);
-                        }}
-                        id='slug'
-                        pageSize={5}
-                        pagination
-                        rows={slugs}
-                        columns={columns}
-                        components={{
-                            Toolbar: GridToolbar,
-                        }}
-                        getRowId={(row) => row.slug}
-                        onRowClick={(rowData) => {
-                            history.push(`/track/${rowData.id}`);
-                        }}
-                    />
-                </div>
-            </Grid>
-        </Grid>
+        <>
+            <CssBaseline />
+            <div className={classes.container}>
+                <Grid container spacing={2} justify='center'>
+                    <Grid item sm={12} xs={12}>
+                        <div className={classes.root}>
+                            <DataGrid
+                                autoPageSize
+                                page={page}
+                                onPageChange={(params) => {
+                                    setPage(params.page);
+                                }}
+                                id='slug'
+                                pageSize={5}
+                                pagination
+                                rows={slugs}
+                                columns={columns}
+                                components={{
+                                    Toolbar: GridToolbar,
+                                }}
+                                getRowId={(row) => row.slug}
+                                onRowClick={(rowData) => {
+                                    history.push(`/track/${rowData.id}`);
+                                }}
+                                sortModel={[
+                                    {
+                                        field: 'createdAt',
+                                        sort: 'desc',
+                                    },
+                                ]}
+                            />
+                        </div>
+                    </Grid>
+                </Grid>
+            </div>
+        </>
     );
 };

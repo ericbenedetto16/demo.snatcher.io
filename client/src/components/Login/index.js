@@ -15,6 +15,9 @@ import { GATEWAY_URL } from '../../api/queries';
 import { setToken } from '../../utils/index';
 
 const useStyles = makeStyles((theme) => ({
+    login: {
+        marginBottom: theme.spacing(8),
+    },
     paper: {
         marginTop: theme.spacing(8),
         display: 'flex',
@@ -48,124 +51,126 @@ export const Login = ({ setToggleSignup }) => {
     const [invalid, setInvalid] = useState(false);
 
     return (
-        <Container component='main' maxWidth='xs'>
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Typography component='h1' variant='h5'>
-                    Log in
-                </Typography>
+        <div className={classes.login}>
+            <Container component='main' maxWidth='xs'>
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Typography component='h1' variant='h5'>
+                        Log in
+                    </Typography>
 
-                <form
-                    className={classes.form}
-                    // eslint-disable-next-line consistent-return
-                    onSubmit={async (e) => {
-                        try {
-                            e.preventDefault();
+                    <form
+                        className={classes.form}
+                        // eslint-disable-next-line consistent-return
+                        onSubmit={async (e) => {
+                            try {
+                                e.preventDefault();
 
-                            setInvalid(false); // Reset Invalid Credentials Status
+                                setInvalid(false); // Reset Invalid Credentials Status
 
-                            const payload = {
-                                username: email,
-                                password,
-                            };
+                                const payload = {
+                                    username: email,
+                                    password,
+                                };
 
-                            const res = await fetch(
-                                `${GATEWAY_URL}/users/login/`,
-                                {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify(payload),
-                                }
-                            );
-
-                            if (res.status === 429) alert('Slow Down Hotshot');
-
-                            const json = await res.json();
-
-                            if (!json.success) {
-                                setInvalid(true);
-                                return;
-                            }
-
-                            setToken(json.token);
-
-                            history.push('/');
-                        } catch (err) {
-                            setInvalid(true);
-                            // eslint-disable-next-line no-alert
-                            alert('Server Error');
-                        }
-                    }}
-                >
-                    <TextField
-                        variant='outlined'
-                        margin='normal'
-                        required
-                        fullWidth
-                        id='email'
-                        label='Email Address'
-                        name='email'
-                        autoComplete='email'
-                        type='email'
-                        autoFocus
-                        onChange={(e) => {
-                            setEmail(e.target.value);
-                        }}
-                        error={invalid}
-                    />
-                    <TextField
-                        variant='outlined'
-                        margin='normal'
-                        required
-                        fullWidth
-                        name='password'
-                        label='Password'
-                        type='password'
-                        id='password'
-                        autoComplete='current-password'
-                        onChange={(e) => {
-                            setPassword(e.target.value);
-                        }}
-                        error={invalid}
-                        helperText={
-                            invalid ? 'Invalid Username or Password' : ''
-                        }
-                    />
-                    <Button
-                        type='submit'
-                        fullWidth
-                        variant='contained'
-                        color='primary'
-                        className={classes.submit}
-                    >
-                        Log In
-                    </Button>
-                    <Grid container>
-                        <Grid item>
-                            <p className={classes.inline}>
-                                Don&apos;t have an account?
-                            </p>
-                            <Link
-                                component={RouterLink}
-                                onClick={(e) => {
-                                    if (setToggleSignup) {
-                                        e.preventDefault();
-                                        setToggleSignup(true);
+                                const res = await fetch(
+                                    `${GATEWAY_URL}/users/login/`,
+                                    {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify(payload),
                                     }
-                                }}
-                                href='/signup'
-                                to='/signup'
-                                variant='body2'
-                            >
-                                Sign Up
-                            </Link>
+                                );
+
+                                if (res.status === 429) alert('Slow Down Hotshot');
+
+                                const json = await res.json();
+
+                                if (!json.success) {
+                                    setInvalid(true);
+                                    return;
+                                }
+
+                                setToken(json.token);
+
+                                history.push('/');
+                            } catch (err) {
+                                setInvalid(true);
+                                // eslint-disable-next-line no-alert
+                                alert('Server Error');
+                            }
+                        }}
+                    >
+                        <TextField
+                            variant='outlined'
+                            margin='normal'
+                            required
+                            fullWidth
+                            id='email'
+                            label='Email Address'
+                            name='email'
+                            autoComplete='email'
+                            type='email'
+                            autoFocus
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                            }}
+                            error={invalid}
+                        />
+                        <TextField
+                            variant='outlined'
+                            margin='normal'
+                            required
+                            fullWidth
+                            name='password'
+                            label='Password'
+                            type='password'
+                            id='password'
+                            autoComplete='current-password'
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                            }}
+                            error={invalid}
+                            helperText={
+                                invalid ? 'Invalid Username or Password' : ''
+                            }
+                        />
+                        <Button
+                            type='submit'
+                            fullWidth
+                            variant='contained'
+                            color='primary'
+                            className={classes.submit}
+                        >
+                            Log In
+                        </Button>
+                        <Grid container>
+                            <Grid item>
+                                <p className={classes.inline}>
+                                    Don&apos;t have an account?
+                                </p>
+                                <Link
+                                    component={RouterLink}
+                                    onClick={(e) => {
+                                        if (setToggleSignup) {
+                                            e.preventDefault();
+                                            setToggleSignup(true);
+                                        }
+                                    }}
+                                    href='/signup'
+                                    to='/signup'
+                                    variant='body2'
+                                >
+                                    Sign Up
+                                </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </form>
-            </div>
-        </Container>
+                    </form>
+                </div>
+            </Container>
+        </div>
     );
 };
 

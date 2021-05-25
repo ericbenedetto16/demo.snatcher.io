@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { makeStyles, Grid } from '@material-ui/core';
+import { makeStyles, Grid, CssBaseline } from '@material-ui/core';
 import { GATEWAY_URL } from '../../api/queries';
 import { Map as GoogleMap } from '../Map';
 
 const columns = [
     {
         field: 'slug',
-        headerName: 'Slug',
+        headerName: 'Code',
         width: 150,
         flex: 0.75,
         headerClassName: 'super-app-theme--header',
@@ -64,7 +64,11 @@ const columns = [
     },
 ];
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+    container: {
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(4),
+    },
     root: {
         height: 475,
         margin: '0 auto',
@@ -73,7 +77,7 @@ const useStyles = makeStyles({
             backgroundColor: '#e0e0e0',
         },
     },
-});
+}));
 
 const DEFAULT_CENTER = {
     lat: 40.724360,
@@ -122,38 +126,47 @@ export const SingleSlug = () => {
     if (loading) return <></>;
 
     return (
-
-        <Grid container spacing={2} justify='center'>
-            <Grid item sm={12} xs={12}>
-                <div className={classes.root}>
-                    <DataGrid
-                        autoPageSize
-                        page={page}
-                        onPageChange={(params) => {
-                            setPage(params.page);
-                        }}
-                        pageSize={5}
-                        pagination
-                        rows={data}
-                        columns={columns}
-                        components={{
-                            Toolbar: GridToolbar,
-                        }}
-                        onRowClick={(rowData) => {
-                            // eslint-disable-next-line no-unused-expressions
-                            setLat(rowData.row.latitude);
-                            setLng(rowData.row.longitude);
-                        }}
-                    />
-                </div>
-            </Grid>
-            <Grid item sm={12} xs={12}>
-                <div className={classes.root}>
-                    {/* eslint-disable-next-line max-len */}
-                    <GoogleMap lat={lat} lng={lng} data={data} zoom={zoom} DEFAULT_CENTER={DEFAULT_CENTER} />
-                </div>
-            </Grid>
-        </Grid>
-
+        <>
+            <CssBaseline />
+            <div className={classes.container}>
+                <Grid container spacing={2} justify='center'>
+                    <Grid item sm={12} xs={12}>
+                        <div className={classes.root}>
+                            <DataGrid
+                                autoPageSize
+                                page={page}
+                                onPageChange={(params) => {
+                                    setPage(params.page);
+                                }}
+                                pageSize={5}
+                                pagination
+                                rows={data}
+                                columns={columns}
+                                components={{
+                                    Toolbar: GridToolbar,
+                                }}
+                                onRowClick={(rowData) => {
+                                    // eslint-disable-next-line no-unused-expressions
+                                    setLat(rowData.row.latitude);
+                                    setLng(rowData.row.longitude);
+                                }}
+                                sortModel={[
+                                    {
+                                        field: 'dateAccessed',
+                                        sort: 'desc',
+                                    },
+                                ]}
+                            />
+                        </div>
+                    </Grid>
+                    <Grid item sm={12} xs={12}>
+                        <div className={classes.root}>
+                            {/* eslint-disable-next-line max-len */}
+                            <GoogleMap lat={lat} lng={lng} data={data} zoom={zoom} DEFAULT_CENTER={DEFAULT_CENTER} />
+                        </div>
+                    </Grid>
+                </Grid>
+            </div>
+        </>
     );
 };

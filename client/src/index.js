@@ -9,6 +9,7 @@ import { TrackingContainer } from './containers/TrackingContainer';
 import { LoginContainer } from './containers/LoginContainer';
 import { SignupContainer } from './containers/SignupContainer';
 import { Logout } from './components/Logout';
+import { Footer } from './components/Footer';
 
 ReactDOM.render(
     <Router>
@@ -21,6 +22,7 @@ ReactDOM.render(
             <Route path='/signup/' component={SignupContainer} exact />
             <Route path='/logout/' component={Logout} exact />
         </Switch>
+        <Footer />
     </Router>,
     document.getElementById('root')
 );
