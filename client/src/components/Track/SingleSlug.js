@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { makeStyles, Grid, CssBaseline } from '@material-ui/core';
 import { GATEWAY_URL } from '../../api/queries';
-import { Map as GoogleMap } from '../Map';
+import { GoogleMap } from '../GoogleMap';
+import { ClickChart } from '../ClickChart';
 
 const columns = [
     {
@@ -80,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DEFAULT_CENTER = {
-    lat: 40.724360,
+    lat: 40.72436,
     lng: -73.823897,
 };
 
@@ -130,7 +131,12 @@ export const SingleSlug = () => {
             <CssBaseline />
             <div className={classes.container}>
                 <Grid container spacing={2} justify='center'>
-                    <Grid item sm={12} xs={12}>
+                    <Grid
+                        item
+                        sm={12}
+                        xs={12}
+                        style={{ padding: '0', paddingBottom: '8px' }}
+                    >
                         <div className={classes.root}>
                             <DataGrid
                                 autoPageSize
@@ -159,13 +165,44 @@ export const SingleSlug = () => {
                             />
                         </div>
                     </Grid>
-                    <Grid item sm={12} xs={12}>
-                        <div className={classes.root}>
-                            {/* eslint-disable-next-line max-len */}
-                            <GoogleMap lat={lat} lng={lng} data={data} zoom={zoom} DEFAULT_CENTER={DEFAULT_CENTER} />
-                        </div>
-                    </Grid>
                 </Grid>
+                <div
+                    className={classes.root}
+                    style={{ height: 'auto', maxHeight: '1000px' }}
+                >
+                    <Grid container spacing={2}>
+                        <Grid
+                            item
+                            xl={6}
+                            xs={12}
+                            style={{
+                                padding: '0',
+                                paddingTop: '8px',
+                                height: '500px',
+                            }}
+                        >
+                            <GoogleMap
+                                lat={lat}
+                                lng={lng}
+                                data={data}
+                                zoom={zoom}
+                                DEFAULT_CENTER={DEFAULT_CENTER}
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            xl={6}
+                            xs={12}
+                            style={{
+                                padding: '0',
+                                paddingTop: '8px',
+                                height: '500px',
+                            }}
+                        >
+                            <ClickChart clicks={data} />
+                        </Grid>
+                    </Grid>
+                </div>
             </div>
         </>
     );
