@@ -6,3 +6,15 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.jss1 {
+    flex-grow: 0 !important;
+}
+
+.makeStyles-root-1 {
+    flex-grow: 0 !important;
+}
+
+footer {
+    margin-top: auto;
+}

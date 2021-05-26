@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 import { Marker } from './marker';
 
-export const Map = ({
-    DEFAULT_CENTER, lat, lng, zoom, data,
-}) => {
+// eslint-disable-next-line object-curly-newline
+export const GoogleMap = ({ DEFAULT_CENTER, lat, lng, zoom, data }) => {
     const markers = data.map((item) => (
         <Marker key={item.id} lat={item.latitude} lng={item.longitude} />
     ));
@@ -23,11 +22,10 @@ export const Map = ({
     );
 };
 
-Map.propTypes = {
+GoogleMap.propTypes = {
     DEFAULT_CENTER: PropTypes.objectOf(PropTypes.any).isRequired,
     lat: PropTypes.number.isRequired,
     lng: PropTypes.number.isRequired,
     zoom: PropTypes.number.isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
-    data: PropTypes.array.isRequired,
+    data: PropTypes.arrayOf(Object).isRequired,
 };
