@@ -24,7 +24,7 @@ const DevelopedBy = () => (
     >
         Developed by{' '}
         <Link color='inherit' href='https://ericbenedetto.tech/'>
-            Eric Bendetto
+            Eric Benedetto
         </Link>{' '}
         and
         <Link
