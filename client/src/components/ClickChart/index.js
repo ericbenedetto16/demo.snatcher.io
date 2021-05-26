@@ -43,7 +43,7 @@ export const ClickChart = ({ clicks }) => {
 
     dates = Array.from(data.keys());
 
-    const upperBoundClicks = Math.max(Array.from(data.values())) + 1;
+    const upperBoundClicks = Math.max(...Array.from(data.values())) + 1;
 
     const opts = {
         chart: {
