@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
     heroButtons: {
         marginTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
     },
 }));
 
@@ -33,6 +34,7 @@ export const TrackerInput = () => {
 
     return (
         <form
+            className={classes.container}
             onSubmit={async (e) => {
                 e.preventDefault();
                 setInvalid(false);

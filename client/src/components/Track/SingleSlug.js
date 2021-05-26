@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { makeStyles, Grid, CssBaseline } from '@material-ui/core';
+import {
+    makeStyles, Grid, CssBaseline, Typography,
+} from '@material-ui/core';
 import { GATEWAY_URL } from '../../api/queries';
 import { Map as GoogleMap } from '../Map';
 
@@ -132,6 +134,15 @@ export const SingleSlug = () => {
                 <Grid container spacing={2} justify='center'>
                     <Grid item sm={12} xs={12}>
                         <div className={classes.root}>
+                            <Typography
+                                component='h1'
+                                variant='h2'
+                                align='center'
+                                color='textPrimary'
+                                gutterBottom
+                            >
+                                Visitor Data
+                            </Typography>
                             <DataGrid
                                 autoPageSize
                                 page={page}
