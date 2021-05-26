@@ -70,12 +70,13 @@ const columns = [
 const useStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing(4),
-    },
-    root: {
-        height: 475,
+        padding: theme.spacing(4, 8, 10),
         margin: '0 auto',
-        width: '80%',
+        width: '85%',
+        // paddingBottom: theme.spacing(8),
+    },
+    dataGrid: {
+        height: 475,
         '& .super-app-theme--header': {
             backgroundColor: '#e0e0e0',
         },
@@ -132,23 +133,22 @@ export const SingleSlug = () => {
         <>
             <CssBaseline />
             <div className={classes.container}>
-                <Grid container spacing={2} justify='center'>
+                <Grid container spacing={4} justify='center'>
                     <Grid
                         item
                         sm={12}
                         xs={12}
-                        style={{ padding: '0', paddingBottom: '8px' }}
                     >
-                        <div className={classes.root}>
-                            <Typography
-                                component='h1'
-                                variant='h2'
-                                align='center'
-                                color='textPrimary'
-                                gutterBottom
-                            >
-                                Visitor Data
-                            </Typography>
+                        <Typography
+                            component='h1'
+                            variant='h2'
+                            align='center'
+                            color='textPrimary'
+                            gutterBottom
+                        >
+                            Visitor Data
+                        </Typography>
+                        <div className={classes.dataGrid}>
                             <DataGrid
                                 autoPageSize
                                 page={page}
@@ -159,6 +159,7 @@ export const SingleSlug = () => {
                                 pagination
                                 rows={data}
                                 columns={columns}
+                                // style={{ height: '475px' }}
                                 components={{
                                     Toolbar: GridToolbar,
                                 }}
@@ -176,44 +177,33 @@ export const SingleSlug = () => {
                             />
                         </div>
                     </Grid>
-                </Grid>
-                <div
-                    className={classes.root}
-                    style={{ height: 'auto', maxHeight: '1000px' }}
-                >
-                    <Grid container spacing={2}>
-                        <Grid
-                            item
-                            xl={6}
-                            xs={12}
-                            style={{
-                                padding: '0',
-                                paddingTop: '8px',
-                                height: '500px',
-                            }}
-                        >
-                            <GoogleMap
-                                lat={lat}
-                                lng={lng}
-                                data={data}
-                                zoom={zoom}
-                                DEFAULT_CENTER={DEFAULT_CENTER}
-                            />
-                        </Grid>
-                        <Grid
-                            item
-                            xl={6}
-                            xs={12}
-                            style={{
-                                padding: '0',
-                                paddingTop: '8px',
-                                height: '500px',
-                            }}
-                        >
-                            <ClickChart clicks={data} />
-                        </Grid>
+                    <Grid
+                        item
+                        lg={6}
+                        xs={12}
+                        style={{
+                            height: '500px',
+                        }}
+                    >
+                        <GoogleMap
+                            lat={lat}
+                            lng={lng}
+                            data={data}
+                            zoom={zoom}
+                            DEFAULT_CENTER={DEFAULT_CENTER}
+                        />
                     </Grid>
-                </div>
+                    <Grid
+                        item
+                        lg={6}
+                        xs={12}
+                        style={{
+                            height: '500px',
+                        }}
+                    >
+                        <ClickChart clicks={data} />
+                    </Grid>
+                </Grid>
             </div>
         </>
     );
