@@ -36,7 +36,7 @@ export const Home = () => {
                         >
                             Snatcher
                             <br />
-                            URL Shortner
+                            URL Shortener
                         </Typography>
                         <Typography
                             variant='h5'
@@ -44,7 +44,7 @@ export const Home = () => {
                             color='textSecondary'
                             paragraph
                         >
-                            Snatcher Shortner allows you to shorten long links
+                            Snatcher Shortener allows you to shorten long links
                             while providing you with some of the most advanced
                             and detailed statistical data and metadata for all
                             clicks on your links.

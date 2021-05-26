@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import {
-    makeStyles, Grid, CssBaseline, Typography,
-} from '@material-ui/core';
+// eslint-disable-next-line object-curly-newline
+import { makeStyles, Grid, CssBaseline, Typography } from '@material-ui/core';
 import { GATEWAY_URL } from '../../api/queries';
 import { getToken } from '../../utils';
 
@@ -99,7 +98,7 @@ export const UserSlugs = () => {
                     color='textPrimary'
                     gutterBottom
                 >
-                    Shortned Links
+                    Shortened Links
                 </Typography>
                 <Grid container spacing={2} justify='center'>
                     <Grid item sm={12} xs={12}>

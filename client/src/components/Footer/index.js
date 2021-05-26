@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -8,23 +9,28 @@ const Copyright = () => (
     <Typography variant='body2' color='textSecondary' align='center'>
         {'Copyright © '}
         <Link color='inherit' href='/'>
-            Snatcher Shortner
-        </Link>
-        {' '}
+            Snatcher Shortener
+        </Link>{' '}
         {new Date().getFullYear()}
     </Typography>
 );
 
 const DevelopedBy = () => (
-    <Typography variant='subtitle1' align='center' color='textSecondary' component='p'>
-        Developed by
-        {' '}
+    <Typography
+        variant='subtitle1'
+        align='center'
+        color='textSecondary'
+        component='p'
+    >
+        Developed by{' '}
         <Link color='inherit' href='https://ericbenedetto.tech/'>
             Eric Bendetto
-        </Link>
-        {' '}
+        </Link>{' '}
         and
-        <Link color='inherit' href='https://www.linkedin.com/in/jonathanshitrit/'>
+        <Link
+            color='inherit'
+            href='https://www.linkedin.com/in/jonathanshitrit/'
+        >
             {' '}
             Jonathan Shitrit
         </Link>
