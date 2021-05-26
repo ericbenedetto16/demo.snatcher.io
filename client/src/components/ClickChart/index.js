@@ -4,10 +4,11 @@ import Chart from 'react-apexcharts';
 
 export const ClickChart = ({ clicks }) => {
     // Process Clicks into Map
-    const data = new Map();
+    let data = new Map();
 
     clicks.forEach(({ dateAccessed }) => {
         const d = new Date(dateAccessed);
+        d.setDate(d.getDate() + 1);
         const formattedDate = d.toLocaleDateString();
         if (data.has(formattedDate)) {
             data.set(formattedDate, data.get(formattedDate) + 1);
@@ -16,24 +17,31 @@ export const ClickChart = ({ clicks }) => {
         }
     });
 
-    // Add Any Empty Days
-    let dates = Array.from(data.keys()).sort(
-        (a, b) => new Date(a) - new Date(b)
+    data = new Map(
+        [...data.entries()].sort((a, b) => new Date(a[0]) - new Date(b[0]))
     );
+
+    // Add Any Empty Days
+    let dates = Array.from(data.keys());
 
     const lowerDate = new Date(dates[0]);
     const upperDate = new Date(dates[dates.length - 1]);
 
-    if (lowerDate.getTime() !== upperDate.getTime()) {
-        const curr = lowerDate;
-        while (lowerDate.getTime() < upperDate.getTime()) {
+    if (lowerDate.toLocaleDateString() !== upperDate.toLocaleDateString()) {
+        const curr = lowerDate; // Start Filling From Lower to Upper Bound
+        while (curr.toLocaleDateString() !== upperDate.toLocaleDateString()) {
+            if (!data.has(curr.toLocaleDateString())) {
+                data.set(curr.toLocaleDateString(), 0);
+            }
             curr.setDate(curr.getDate() + 1);
-            dates.push(curr);
-            data.set(curr.toLocaleDateString(), 0);
         }
     }
 
-    dates = Array.from(data.keys()).sort((a, b) => new Date(a) - new Date(b));
+    data = new Map(
+        [...data.entries()].sort((a, b) => new Date(a[0]) - new Date(b[0]))
+    );
+
+    dates = Array.from(data.keys());
 
     const upperBoundClicks = Math.max(Array.from(data.values())) + 1;
 
@@ -93,6 +101,7 @@ export const ClickChart = ({ clicks }) => {
                 },
             },
         },
+        series: [{ name: 'Clicks', data: Array.from(data.values()) }],
     };
 
     const series = [
