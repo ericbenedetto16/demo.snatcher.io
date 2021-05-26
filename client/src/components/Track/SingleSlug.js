@@ -70,10 +70,17 @@ const columns = [
 const useStyles = makeStyles((theme) => ({
     container: {
         backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing(4, 8, 10),
+        [theme.breakpoints.up('xs')]: {
+            padding: theme.spacing(4, 1, 10),
+        },
+        [theme.breakpoints.up('sm')]: {
+            padding: theme.spacing(4, 10, 10),
+        },
+        [theme.breakpoints.up('lg')]: {
+            padding: theme.spacing(4, 18, 10),
+        },
         margin: '0 auto',
-        width: '85%',
-        // paddingBottom: theme.spacing(8),
+        width: '100%',
     },
     dataGrid: {
         height: 475,
